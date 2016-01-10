@@ -39,7 +39,7 @@ import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
-
+import org.eclipse.uml2.uml.Class;
 /**
  * A Java program that may be run stand-alone (with the required EMF and UML2
  * bundle JARs on the classpath) to create the example model illustrated in the
@@ -356,7 +356,7 @@ public class GettingStartedWithUML2 {
 		realization_.setName(name);
 		
 		realization_.getSuppliers().add(interface_);
-		//realization_.getClients().add(class_);
+		realization_.getClients().add(class_);
 		package_.getPackagedElements().add(realization_);
 		
 		out("Realization '%s' created.", realization_.getQualifiedName());
