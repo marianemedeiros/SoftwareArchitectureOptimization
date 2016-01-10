@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_biMW0LedEeW3z98rLgHiIg" name="myModel">
+  <packagedElement xmi:type="uml:Class" xmi:id="_biOzELedEeW3z98rLgHiIg" name="class1"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_biPaILedEeW3z98rLgHiIg" name="class2"/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_biPaIbedEeW3z98rLgHiIg" name="class3"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_biPaIredEeW3z98rLgHiIg" name="interface1"/>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_biPaI7edEeW3z98rLgHiIg" name="interface2"/>
+  <packagedElement xmi:type="uml:Component" xmi:id="_biPaJLedEeW3z98rLgHiIg" name="component1"/>
+  <packagedElement xmi:type="uml:Realization" xmi:id="_biPaJbedEeW3z98rLgHiIg" name="realization1" supplier="_biPaIredEeW3z98rLgHiIg"/>
+</uml:Model>
