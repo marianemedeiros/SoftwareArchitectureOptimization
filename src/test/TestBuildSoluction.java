@@ -18,7 +18,7 @@ public class TestBuildSoluction {
 
 	@Test
 	public void testWithLayeredArchitecturalStyle() {
-		String path = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo em Camada/ModeloEmCamada";
+		String path = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo em Camada/ModeloCamada";
 
 		LoadModel loadModel = new LoadModel(URI.createFileURI(path).appendSegment("model").
 				appendFileExtension(UMLResource.FILE_EXTENSION));
@@ -33,7 +33,7 @@ public class TestBuildSoluction {
 	
 	@Test
 	public void testWithClientServerArchitecturalStyle() {
-		String path = "/home/mariane/papyrus/ModeloClienteServidor";
+		String path = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo ClienteServidor/ModeloClienteServidor";
 
 		LoadModel loadModel = new LoadModel(URI.createFileURI(path).appendSegment("model").
 				appendFileExtension(UMLResource.FILE_EXTENSION));
