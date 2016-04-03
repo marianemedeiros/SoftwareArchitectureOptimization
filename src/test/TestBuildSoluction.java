@@ -42,7 +42,7 @@ public class TestBuildSoluction {
 		//assertEquals(loadModel.componentClasses.get(0).size(), (Object)2);
 		//assertEquals(loadModel.componentClasses.get(1).size(), (Object)2);
 		
-		//loadModel.showSizeOfMaps();
+		loadModel.showSizeOfMaps();
 	}
 	
 	
