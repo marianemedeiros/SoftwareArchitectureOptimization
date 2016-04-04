@@ -6,6 +6,7 @@ package loadModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.TreeIterator;
@@ -53,7 +54,6 @@ public class LoadModel {
 
 	public static final String base_Classifier = "base_Classifier";
 	public static final String ID = "id";
-	public static final String TYPE = "type";
 	public static final String name = "name";
 	public static final String supplier = "supplier";
 	public static final String client = "client";
@@ -82,13 +82,11 @@ public class LoadModel {
 	private HashMap<Integer, String> mapId2LayerName;
 
 
-	private HashMap<Integer, String> mapInterfaceServer;
-
-	private HashMap<Integer, String> mapInterfaceClient;
+	private HashMap<Integer, String> mapClassServer;// map every class that realize an interface that are server
+	private HashMap<Integer, String> mapClassClient; // map every class that realize an interface that are client
 
 
 	public HashMap<Integer,Integer> classComponent;
-	public HashMap<Integer,Integer> interfaceComponent;
 	public HashMap<Integer, Set<Integer>> componentClasses ; // component - classes in component
 	public HashMap<Integer,Integer> componentLayer; // componentId - layerId
 	public ArrayList<Integer[]> interfaces_;
@@ -117,7 +115,6 @@ public class LoadModel {
 		mapId2InterfaceName = new HashMap<Integer, String>();
 
 		classComponent = new HashMap<Integer, Integer>();
-		interfaceComponent = new HashMap<Integer, Integer>();
 		componentClasses = new HashMap<Integer, Set<Integer>>();
 		interfaces_ = new ArrayList<Integer[]>();
 		internalRelations = new ArrayList<Integer[]>();
@@ -127,7 +124,7 @@ public class LoadModel {
 
 
 	private org.eclipse.uml2.uml.Package load(URI uri) {
-		System.err.println("Loading ...");
+		System.err.println("Loading file " + uri.path());
 		org.eclipse.uml2.uml.Package package_ = null;
 
 		try {
@@ -174,19 +171,17 @@ public class LoadModel {
 						mapLayerName2Id.put(d.eSetting(featureID).get(true).toString(), layer_id);
 					}else if(d.eClass().getName().equals(CLIENT)){
 						architectureStyle = CLIENT_SERVER;
-						if(mapInterfaceClient == null){
-							mapInterfaceClient = new HashMap<Integer, String>();
+						if(mapClassClient == null){
+							mapClassClient = new HashMap<Integer, String>();
 						}
 					}else if(d.eClass().getName().equals(SERVER)){
 						architectureStyle = CLIENT_SERVER;
-						if(mapInterfaceServer == null){
-							mapInterfaceServer = new HashMap<Integer, String>();
+						if(mapClassServer == null){
+							mapClassServer = new HashMap<Integer, String>();
 						}
 					}
 				}else{
-
 					NamedElement asNamed = (NamedElement) current;
-
 					if(asNamed.eClass().getName().equals(component_)){ // get Components
 						String componentName = asNamed.getLabel();
 
@@ -207,7 +202,6 @@ public class LoadModel {
 						mapClassName2Id.put(className,class_id);
 						mapId2ClassName.put(class_id, className);
 						class_id++;
-
 					}
 				}
 			}
@@ -222,7 +216,8 @@ public class LoadModel {
 	 * 		<ul> Class : that mark a relationship between a class and the component that the class belongs.
 	 * 		<ul> DynamicEObjectImpl: mark a relationship between a component and the layer that the component belongs.
 	 * */
-	public void buildSoluction(){
+	public Solution buildSoluction(){
+		Solution solution = null;
 		collectComponentsClassesInterfacesAndLayers();
 
 		for (TreeIterator<EObject> i = resource.getAllContents(); i .hasNext();) {
@@ -245,32 +240,75 @@ public class LoadModel {
 						usage_(usage);
 					}else if(asNamed.eClass().getName().equals(association_)){
 						Association a = (Association) asNamed;
-						Integer index = 0;
-
-						Integer[] r1 = new Integer[2];
-						Integer[] r2 = new Integer[2];
-
-						for (Type element : a.getEndTypes()) {
-							if(element instanceof org.eclipse.uml2.uml.Class){
-								r1[index] = mapClassName2Id.get(element.getName());
-								index++;
-							}
-						}
-
-						if((classComponent.get(r1[0]) == classComponent.get(r1[1])) && r1[0] != null && r1[1] != null){
-							internalRelations.add(r1);
-							r2[0] = r1[1]; r2[1] = r1[0];
-							internalRelations.add(r2);
-							
-							System.out.println("<<"+ mapId2ClassName.get(r1[0]) + ">> and <<" + mapId2ClassName.get(r1[1]) +" >> have a bidirectional relationship,"
-									+ " but they are in the same component" );
-
-						}else if((classComponent.get(r1[0]) != classComponent.get(r1[1])) && r1[0] != null && r1[1] != null){
-							System.out.println("Bidirectional Relationship with class in diferent components: <<" + r1[0] + ":" + r1[1] +">>");
-						}
+						association_(a);
 					}
 				}
-			}}}
+			}
+		}
+		if(architectureStyle.equals(LAYER)){
+			solution = new Solution(componentClasses, interfaces_, internalRelations, componentLayer, classComponent);
+		}else if(architectureStyle.equals(CLIENT_SERVER)){
+			solution = new Solution(componentClasses, interfaces_, mapClassServer, mapClassClient, internalRelations, classComponent);
+		}
+		return solution;
+	}
+
+	/**
+	 * This function analyze association between two element from model. Association can be bidirectional or unidirectional. 
+	 * @param a
+	 */
+	private void association_(Association a) {
+		int index = 0;
+
+		Integer[] cl1 = new Integer[2];
+		Integer[] cl2 = new Integer[2];
+
+		Interface[] inter = new Interface[2];
+		int indexInter = 0;
+
+		for (Type element : a.getEndTypes()) {
+			if(element instanceof org.eclipse.uml2.uml.Class){
+				cl1[index] = mapClassName2Id.get(element.getName());
+				index++;
+			}else if(element instanceof Interface){
+				inter[indexInter] = (Interface) element;
+				indexInter++;
+			}
+
+		}
+
+		/* We consider just two kind of association:
+		 * 1 - between two classes in the same component
+		 * 2 - between two interfaces in different components. 
+		 * 
+		 * We need to remember that Association is used to bidirectional relationship. 
+		 * To unidirectional relationship is used Usage.
+		 * */
+		if((classComponent.get(cl1[0]) == classComponent.get(cl1[1])) && cl1[0] != null && cl1[1] != null){
+			internalRelations.add(cl1);
+			cl2[0] = cl1[1]; cl2[1] = cl1[0];
+			internalRelations.add(cl2);
+
+			System.out.println("<<"+ mapId2ClassName.get(cl1[0]) + ">> and <<" + mapId2ClassName.get(cl1[1]) +" >> have a bidirectional relationship,"
+					+ " but they are in the same component." );
+
+		}else if(inter[0] != null && inter[1] != null){
+			Integer class0 = getWhoRealizeInterface(inter[0]); // class that realize inter[0]
+			Integer class1 = getWhoRealizeInterface(inter[1]); // class that realize inter[1]
+
+			if(class0 != -1 && class1 != -1 && classComponent.get(class0) != classComponent.get(class1)){
+				Integer[] rl1 = new Integer[2];
+				Integer[] rl2 = new Integer[2];
+				rl1[0] = class0; rl1[1] = class1;
+				rl2[0] = class1; rl2[1] = class0;
+				interfaces_.add(rl1); interfaces_.add(rl2);
+				System.out.println("<<"+ mapId2ClassName.get(class0) + ">> and <<" + mapId2ClassName.get(class1) +
+						" >> have a bidirectional relationship,"
+						+ " and they are in different components." );
+			}
+		}
+	}
+
 
 	/**
 	 * Get relationship between classes.
@@ -284,7 +322,7 @@ public class LoadModel {
 			if(client instanceof org.eclipse.uml2.uml.Class){
 				Integer id = mapClassName2Id.get(client.getName());
 				clients.add(id);
-				verifyMapClassComponent(client);
+				verifyMapClassComponent((org.eclipse.uml2.uml.Class) client);
 			}if(client instanceof org.eclipse.uml2.uml.Interface){
 				clients = getWhoRealizeInterfaceAndAddToList((Interface) client);
 			}
@@ -295,7 +333,7 @@ public class LoadModel {
 				Interface inter = (Interface) s;
 				relationships = getWhoRealizeInterfaceAndAddToList(inter);
 			}else if(s instanceof org.eclipse.uml2.uml.Class){
-				verifyMapClassComponent(s);
+				verifyMapClassComponent((org.eclipse.uml2.uml.Class) s);
 				Integer idS = mapClassName2Id.get(s.getLabel());
 				for (Integer client : clients) {
 					if(classComponent.get(idS) == classComponent.get(client)){
@@ -322,9 +360,11 @@ public class LoadModel {
 
 
 	/**
+	 * 
 	 * This method get what class realize the interface_.
 	 * @param interface_
 	 */
+	//TODO por que colocar a classe que realiza a interface em uma lista, se vai sempre uma classe??? (VER PQ)
 	private ArrayList<Integer> getWhoRealizeInterfaceAndAddToList(Interface interface_) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (Relationship relationship : interface_.getRelationships()) {
@@ -339,12 +379,30 @@ public class LoadModel {
 		return list;
 	}
 
+	/**
+	 * This method get what class realize the interface_.
+	 * @param interface_
+	 */
+	private Integer getWhoRealizeInterface(Interface interface_) {
+		for (Relationship relationship : interface_.getRelationships()) {
+			if(relationship instanceof InterfaceRealization){
+				InterfaceRealization x = (InterfaceRealization) relationship;
+				if(x.getImplementingClassifier() instanceof org.eclipse.uml2.uml.Class){
+					verifyMapClassComponent((org.eclipse.uml2.uml.Class) x.getImplementingClassifier());
+					Integer id = mapClassName2Id.get(x.getImplementingClassifier().getName());
+					return id;
+				}
+			}
+		}
+		return -1;
+	}
+
 
 	/**
 	 * Verify if client are in a component if not, add to map of ClassComponent this relationship. 
 	 * @param client
 	 */
-	private void verifyMapClassComponent(NamedElement client) {
+	private void verifyMapClassComponent(org.eclipse.uml2.uml.Class client) {
 		Integer idComponent = mapComponentName2Id.get(client.getNamespace().getName());
 		Integer idOfClient = mapClassName2Id.get(client.getName());
 
@@ -371,7 +429,8 @@ public class LoadModel {
 			componentClasses.get(component).add(mapClassName2Id.get(className));
 		}
 
-		verifyMapClassComponent(asNamed);
+
+		verifyMapClassComponent((org.eclipse.uml2.uml.Class)asNamed);
 		//classComponent.put(mapClassName2Id.get(className), component);
 		System.out.println("Class <<" + className +">> in component <<" + asNamed.getNamespace().getName() + ">>");
 	}
@@ -381,7 +440,6 @@ public class LoadModel {
 	 * Get relationship between component and a layer or can verify if an element it's a client or a server.
 	 * @param d
 	 */
-
 	private void stereotype_(DynamicEObjectImpl d) {
 		if(architectureStyle.equals(LAYER)){
 			featureID =  d.eClass().getEStructuralFeature(ID);
@@ -399,9 +457,9 @@ public class LoadModel {
 
 		}else if(architectureStyle.equals(CLIENT_SERVER)){
 			if(d.eClass().getName().equals(CLIENT))
-				setTypeOfElement(CLIENT, mapInterfaceClient, d);
+				setTypeOfElement(CLIENT, mapClassClient, d);
 			else
-				setTypeOfElement(SERVER, mapInterfaceServer, d);
+				setTypeOfElement(SERVER, mapClassServer, d);
 		}
 
 	}
@@ -410,19 +468,18 @@ public class LoadModel {
 	/**
 	 * Set in mapInterface if interface is a client or a server.
 	 * @param type 
-	 * @param mapInterface
+	 * @param mapClass
 	 * @param d
 	 */
 	private void setTypeOfElement(String type,
-			HashMap<Integer, String> mapInterface, DynamicEObjectImpl d) {
+			HashMap<Integer, String> mapClass, DynamicEObjectImpl d) {
 		featureBaseClassifier =  d.eClass().getEStructuralFeature(base_Classifier);
 
 		if(d.eSetting(featureBaseClassifier).get(true) instanceof Interface){
 			Interface in = (Interface) d.eSetting(featureBaseClassifier).get(true);
-			mapInterface.put(mapInterfaceName2Id.get(in.getName()), type);
-			//			System.err.println(mapInterfaceName2Id.get(in.getName()) + " - " + in.getName() + " - " + type);
+			Integer cl = getWhoRealizeInterface(in);
+			mapClass.put(cl, type);
 		}
-
 	}
 
 
@@ -434,6 +491,32 @@ public class LoadModel {
 		System.out.println("Interface: " + mapInterfaceName2Id.size());
 		System.out.println("Relationships: " + interfaces_.size());
 		System.out.println("InternalRelationship: " + internalRelations.size());
+
+		if(architectureStyle.equals(CLIENT_SERVER)){
+			System.out.println("Server:");
+			for (Entry<Integer, String> server : mapClassServer.entrySet()) {
+				System.out.println(mapId2ClassName.get(server.getKey()) + " -- " + server.getValue());
+			}
+			System.out.println("Client:");
+			for (Entry<Integer, String> server : mapClassClient.entrySet()) {
+				System.out.println(mapId2ClassName.get(server.getKey()) + " -- " + server.getValue());
+			}
+		}
+	}
+
+	public void showMap(){
+		System.out.println("Interfaces");
+		for (Entry<String, Integer> iterable_element : mapInterfaceName2Id.entrySet()) {
+			System.out.println(iterable_element.getKey() + " -- " + iterable_element.getValue());
+		}
+		System.out.println("Classes and Components");
+		for (Entry<Integer, Integer> iterable_element : classComponent.entrySet()) {
+			System.out.println(mapId2ClassName.get(iterable_element.getKey()) + " -- " + mapId2ComponentName.get(iterable_element.getValue()));
+		}
+		System.out.println("Interfaces");
+		for (Integer[] iterable_element : interfaces_) {
+			System.out.println(mapId2ClassName.get(iterable_element[0]) + "--" + mapId2ClassName.get(iterable_element[1]));
+		}
 	}
 
 }
