@@ -5,7 +5,6 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 import loadModel.LoadModel;
-import loadModel.MetricClientServerArch;
 import loadModel.Solution;
 
 import org.eclipse.emf.common.util.URI;
@@ -67,8 +66,8 @@ public class TestBuildSoluction {
 		loadModel.showMap();
 		assertEquals("This architecture must be Client/Server", LoadModel.CLIENT_SERVER, s.type);
 		
-		MetricClientServerArch metricClientServerArch = new MetricClientServerArch();
-		metricClientServerArch.verifyStyle(s);
+		//MetricClientServerArch metricClientServerArch = new MetricClientServerArch();
+		//metricClientServerArch.verifyStyle(s);
 		//loadModel.showSizeOfMaps();
 		//loadModel.showMap();
 	}
