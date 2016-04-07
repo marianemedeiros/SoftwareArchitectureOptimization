@@ -249,6 +249,8 @@ public class LoadModel {
 			solution = new Solution(componentClasses, interfaces_, internalRelations, componentLayer, classComponent);
 		}else if(architectureStyle.equals(CLIENT_SERVER)){
 			solution = new Solution(componentClasses, interfaces_, mapClassServer, mapClassClient, internalRelations, classComponent);
+		}else if(architectureStyle.equals("") && interfaces_.size() == 0 && internalRelations.size() == 0){
+			solution = new Solution(mapComponentName2Id.size(),mapClassName2Id.size());
 		}
 		return solution;
 	}

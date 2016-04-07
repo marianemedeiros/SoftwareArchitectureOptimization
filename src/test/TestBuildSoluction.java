@@ -18,6 +18,28 @@ import org.junit.Test;
 public class TestBuildSoluction {
 
 	@Test
+	public void testGetElementsSoltos() {
+		String path = "/home/mariane/papyrus/elementosSoltos";
+
+		LoadModel loadModel = new LoadModel(URI.createFileURI(path).appendSegment("model").
+				appendFileExtension(UMLResource.FILE_EXTENSION));
+
+		Solution s = loadModel.buildSoluction();
+		loadModel.showSizeOfMaps();
+	}
+	
+	@Test
+	public void testGetElements() {
+		String path = "/home/mariane/workspace/aco2architecture/resources";
+
+		LoadModel loadModel = new LoadModel(URI.createFileURI(path).appendSegment("component").
+				appendFileExtension(UMLResource.FILE_EXTENSION));
+
+		Solution s = loadModel.buildSoluction();
+		loadModel.showSizeOfMaps();
+	}
+	
+	@Test
 	public void testWithLayeredArchitecturalStyle() {
 		String path = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo em Camada/ModeloCamada";
 

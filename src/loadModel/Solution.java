@@ -35,6 +35,32 @@ public class Solution {
 
 	public ArrayList<Integer[]> listBadRel; // list of elements that break rule of layered architecture style. 
 
+	public int number_comp;
+	public int number_class;
+	
+	/**
+	 * To instantiate a Solution with separate elements:
+	 * 
+	 *  @param qtd_comp number of components
+	 *  @param qtd_class number of classes
+	 *  
+	 * */
+	public Solution(int qtd_comp, int qtd_class) {
+		number_class = qtd_class;
+		number_comp = qtd_comp;
+	}
+	
+	/**
+	 * To instantiate a Solution with only components and classes relationship:
+	 * 
+	 *  @param componentClass map with component and classes that belong to component.
+	 *  @param classComponent map with class and component that this class belongs.
+	 *  
+	 * */
+	public Solution(HashMap<Integer, Set<Integer>> componentClasses, HashMap<Integer,Integer> classComponent) {
+		this.componentClasses = componentClasses;
+		this.classComponent = classComponent;
+	}
 	
 	/**
 	 * To instantiate a Solution with LAYERED style, it's necessary:
