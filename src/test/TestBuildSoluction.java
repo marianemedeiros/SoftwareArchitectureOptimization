@@ -86,9 +86,10 @@ public class TestBuildSoluction {
 
 		Solution s = loadModel.buildSoluction();
 		loadModel.showMap();
+		loadModel.showSizeOfMaps();
 		assertEquals("This architecture must be Client/Server", LoadModel.CLIENT_SERVER, s.type);
 		
-		//MetricClientServerArch metricClientServerArch = new MetricClientServerArch();
+		//metricClientServerArch metricClientServerArch = new MetricClientServerArch();
 		//metricClientServerArch.verifyStyle(s);
 		//loadModel.showSizeOfMaps();
 		//loadModel.showMap();
