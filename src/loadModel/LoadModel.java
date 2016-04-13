@@ -21,12 +21,15 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.uml2.uml.Association;
+import org.eclipse.uml2.uml.ClassifierTemplateParameter;
 import org.eclipse.uml2.uml.Component;
+import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.ProfileApplication;
 import org.eclipse.uml2.uml.Relationship;
+import org.eclipse.uml2.uml.TemplateBinding;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.Usage;
@@ -153,7 +156,9 @@ public class LoadModel {
 			if (!(current instanceof NamedElement))
 				i.prune();
 
-			if(!(current instanceof ProfileApplication) && !(current instanceof EAnnotation)){
+			if(!(current instanceof ProfileApplication) && !(current instanceof EAnnotation) && 
+					!(current instanceof ClassifierTemplateParameter) && !(current instanceof Generalization) &&
+					!(current instanceof TemplateBinding)){
 
 				if(current instanceof DynamicEObjectImpl){ // get Layers
 					DynamicEObjectImpl d = (DynamicEObjectImpl) current;
@@ -226,7 +231,10 @@ public class LoadModel {
 			if (!(current instanceof NamedElement))
 				i.prune();
 
-			if(!(current instanceof ProfileApplication) && !(current instanceof EAnnotation)){
+			if(!(current instanceof ProfileApplication) && !(current instanceof EAnnotation) &&
+					!(current instanceof ClassifierTemplateParameter) && !(current instanceof Generalization) &&
+					!(current instanceof TemplateBinding)){
+				
 				if(current instanceof DynamicEObjectImpl){ // verify stereotype
 					DynamicEObjectImpl d = (DynamicEObjectImpl) current;
 					stereotype_(d);
@@ -434,7 +442,7 @@ public class LoadModel {
 
 		verifyMapClassComponent((org.eclipse.uml2.uml.Class)asNamed);
 		//classComponent.put(mapClassName2Id.get(className), component);
-		System.out.println("Class <<" + className +">> in component <<" + asNamed.getNamespace().getName() + ">>");
+		System.out.println("Class <<" + className +">> in component <<" + asNamed.getNamespace().getQualifiedName() + ">>");
 	}
 
 
@@ -497,11 +505,11 @@ public class LoadModel {
 		if(architectureStyle.equals(CLIENT_SERVER)){
 			System.out.println("Server:");
 			for (Entry<Integer, String> server : mapClassServer.entrySet()) {
-				System.out.println(mapId2ClassName.get(server.getKey()) + " -- " + server.getValue());
+				System.out.println(mapId2ClassName.get(server.getKey()) + " -- " + server.getValue() + " -- " + server.getKey());
 			}
 			System.out.println("Client:");
 			for (Entry<Integer, String> server : mapClassClient.entrySet()) {
-				System.out.println(mapId2ClassName.get(server.getKey()) + " -- " + server.getValue());
+				System.out.println(mapId2ClassName.get(server.getKey()) + " -- " + server.getValue() + " -- " + server.getKey());
 			}
 		}
 	}

@@ -32,8 +32,9 @@ public class Solution {
 	public double coesionMetric;
 	public double acopMetric;
 	public double mMetric; 
+	public double totalPenalty; //total de penalidades sofrida pela Solution
 
-	public ArrayList<Integer[]> listBadRel; // list of elements that break rule of layered architecture style. 
+	public ArrayList<Integer[]> listBadRel; //list of elements that break rule of layered architecture style. 
 
 	public int number_comp;
 	public int number_class;
