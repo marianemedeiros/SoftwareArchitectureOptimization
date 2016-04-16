@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
@@ -42,6 +43,8 @@ import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
 
 
 public class LoadModel {
+	private Logger logger = Logger.getLogger(LoadModel.class);
+	
 	public static final String LAYER = "Layer";
 	public static final String CLIENT_SERVER = "ClientServer";
 	public static final String CLIENT = "Client";
@@ -127,7 +130,7 @@ public class LoadModel {
 
 
 	private org.eclipse.uml2.uml.Package load(URI uri) {
-		System.err.println("Loading file " + uri.path());
+		logger.info("Loading file " + uri.path());
 		org.eclipse.uml2.uml.Package package_ = null;
 
 		try {
@@ -139,7 +142,7 @@ public class LoadModel {
 					UMLPackage.Literals.PACKAGE);
 		} catch (WrappedException we) {
 			//err(we.getMessage());
-			System.err.println("execption" + we.getMessage());
+			logger.error("execption" + we.getMessage());
 			System.exit(1);
 		}
 
@@ -299,7 +302,7 @@ public class LoadModel {
 			cl2[0] = cl1[1]; cl2[1] = cl1[0];
 			internalRelations.add(cl2);
 
-			System.out.println("<<"+ mapId2ClassName.get(cl1[0]) + ">> and <<" + mapId2ClassName.get(cl1[1]) +" >> have a bidirectional relationship,"
+			logger.info("<<"+ mapId2ClassName.get(cl1[0]) + ">> and <<" + mapId2ClassName.get(cl1[1]) +" >> have a bidirectional relationship,"
 					+ " but they are in the same component." );
 
 		}else if(inter[0] != null && inter[1] != null){
@@ -312,7 +315,7 @@ public class LoadModel {
 				rl1[0] = class0; rl1[1] = class1;
 				rl2[0] = class1; rl2[1] = class0;
 				interfaces_.add(rl1); interfaces_.add(rl2);
-				System.out.println("<<"+ mapId2ClassName.get(class0) + ">> and <<" + mapId2ClassName.get(class1) +
+				logger.info("<<"+ mapId2ClassName.get(class0) + ">> and <<" + mapId2ClassName.get(class1) +
 						" >> have a bidirectional relationship,"
 						+ " and they are in different components." );
 			}
@@ -347,7 +350,7 @@ public class LoadModel {
 				Integer idS = mapClassName2Id.get(s.getLabel());
 				for (Integer client : clients) {
 					if(classComponent.get(idS) == classComponent.get(client)){
-						System.out.println("<<"+ mapId2ClassName.get(client) + ">> and <<" + mapId2ClassName.get(idS) +" >> have a relation, but they "
+						logger.info("<<"+ mapId2ClassName.get(client) + ">> and <<" + mapId2ClassName.get(idS) +" >> have a relation, but they "
 								+ "are in the same component" );
 						Integer[] r = new Integer[2];
 						r[0] = client; r[1] = idS;
@@ -362,7 +365,7 @@ public class LoadModel {
 					Integer[] r = new Integer[2];
 					r[0] = client; r[1] = relation;
 					interfaces_.add(r);
-					System.out.println("Class <<" + mapId2ClassName.get(client) + ">> and <<" + mapId2ClassName.get(relation) + ">> have a relationship.");
+					logger.info("Class <<" + mapId2ClassName.get(client) + ">> and <<" + mapId2ClassName.get(relation) + ">> have a relationship.");
 				}
 			}			
 		}
@@ -442,7 +445,7 @@ public class LoadModel {
 
 		verifyMapClassComponent((org.eclipse.uml2.uml.Class)asNamed);
 		//classComponent.put(mapClassName2Id.get(className), component);
-		System.out.println("Class <<" + className +">> in component <<" + asNamed.getNamespace().getQualifiedName() + ">>");
+		logger.info("Class <<" + mapClassName2Id.get(className) + ":"+ className +">> in component <<" + asNamed.getNamespace().getQualifiedName() + ">>");
 	}
 
 
@@ -463,7 +466,7 @@ public class LoadModel {
 
 			componentLayer.put(componentId,mapLayerName2Id.get(nameLayer));
 
-			System.out.println("Component <<"+ mapId2ComponentName.get(componentId) + ">> in layer <<" + nameLayer + ">>");			
+			logger.info("Component <<"+ mapId2ComponentName.get(componentId) + ">> in layer <<" + nameLayer + ">>");			
 
 		}else if(architectureStyle.equals(CLIENT_SERVER)){
 			if(d.eClass().getName().equals(CLIENT))
