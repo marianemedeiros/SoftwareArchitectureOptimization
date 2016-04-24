@@ -1,7 +1,8 @@
+package builSolutionAndKDMFile;
 /**
  * 
  */
-package test;
+
 
 import loadModel.LoadModel;
 import loadModel.Solution;

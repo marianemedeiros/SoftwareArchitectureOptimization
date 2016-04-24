@@ -3,22 +3,14 @@
  */
 package loadModel;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.modisco.infra.discovery.core.exception.DiscoveryException;
-import org.eclipse.modisco.java.discoverer.DiscoverKDMModelFromJavaProject;
-
-
 /**
  * @author mariane
  *
  */
-public class Main{
-	public static void main(String[] args) throws DiscoveryException{
+public class Modisco {
+
+	public Modisco() {
+		/*
 		String projectName = "ExtractModel";
 
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
@@ -40,7 +32,6 @@ public class Main{
 		//DiscoverUmlModelFromKdmModel discoverer = new DiscoverUmlModelFromKdmModel();
 		//discoverer.discoverElement(kdmModelFile, new NullProgressMonitor());
 		//Resource umlModel = discoverer.getTargetModel();
-
+	*/
 	}
-
 }
