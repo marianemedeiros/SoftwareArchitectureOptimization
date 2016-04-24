@@ -26,4 +26,15 @@ public class TestKDMtoUMLFile {
 		Solution s = loadModel.buildSoluction();
 		loadModel.showSizeOfMaps();
 	}
+	
+	@Test
+	public void test1() {
+		String path = "/home/mariane/workspace/ExtractModel/";
+
+		LoadModel loadModel = new LoadModel(URI.createFileURI(path).appendSegment("ExtractModelTESTE").
+				appendFileExtension(UMLResource.FILE_EXTENSION));
+
+		Solution s = loadModel.buildSoluction();
+		loadModel.showSizeOfMaps();
+	}
 }

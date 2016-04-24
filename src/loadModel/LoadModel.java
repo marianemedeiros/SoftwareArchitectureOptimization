@@ -45,6 +45,7 @@ import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
 public class LoadModel {
 	private Logger logger = Logger.getLogger(LoadModel.class);
 	
+	public static final String EXTERNALS = "externals";
 	public static final String LAYER = "Layer";
 	public static final String CLIENT_SERVER = "ClientServer";
 	public static final String CLIENT = "Client";
@@ -160,9 +161,12 @@ public class LoadModel {
 				i.prune();
 
 			if(!(current instanceof ProfileApplication) && !(current instanceof EAnnotation) && 
-					!(current instanceof ClassifierTemplateParameter) && !(current instanceof Generalization) &&
+					!(current instanceof ClassifierTemplateParameter) &&
 					!(current instanceof TemplateBinding)){
-
+				
+				if(current instanceof Generalization){
+					// TODO
+				}else
 				if(current instanceof DynamicEObjectImpl){ // get Layers
 					DynamicEObjectImpl d = (DynamicEObjectImpl) current;
 					featureBaseClassifier =  d.eClass().getEStructuralFeature(base_Classifier);
@@ -197,14 +201,16 @@ public class LoadModel {
 						mapId2ComponentName.put(component_id, componentName); // map <<ID,NAME>>
 						component_id++;
 
-					}else if(asNamed.eClass().getName().equals(interface_)){ // get Interfaces
+					}else if(asNamed.eClass().getName().equals(interface_) &&
+							(!asNamed.getNamespace().getQualifiedName().contains(EXTERNALS))){ // get Interfaces
 						String interfaceName = asNamed.getLabel();
 
 						mapInterfaceName2Id.put(interfaceName,interface_id);
 						mapId2InterfaceName.put(interface_id, interfaceName);
 						interface_id++;
 
-					}else if(asNamed.eClass().getName().equals(class_)){ // get Classes
+					}else if(asNamed.eClass().getName().equals(class_) &&
+							(!asNamed.getNamespace().getQualifiedName().contains(EXTERNALS))){ // get Classes
 						String className = asNamed.getLabel();
 
 						mapClassName2Id.put(className,class_id);
@@ -235,16 +241,20 @@ public class LoadModel {
 				i.prune();
 
 			if(!(current instanceof ProfileApplication) && !(current instanceof EAnnotation) &&
-					!(current instanceof ClassifierTemplateParameter) && !(current instanceof Generalization) &&
+					!(current instanceof ClassifierTemplateParameter) &&
 					!(current instanceof TemplateBinding)){
 				
+				if(current instanceof Generalization){
+					// TODO
+				}else 
 				if(current instanceof DynamicEObjectImpl){ // verify stereotype
 					DynamicEObjectImpl d = (DynamicEObjectImpl) current;
 					stereotype_(d);
 				}else{ // other types of elements
 					NamedElement asNamed = (NamedElement) current;
 					if(asNamed.eClass().getName().equals(class_)){
-						classes_(asNamed);
+						if(!asNamed.getNamespace().getQualifiedName().contains(EXTERNALS))
+							classes_(asNamed);
 					}
 					else if(asNamed.eClass().getName().equals(usage_)){
 						Usage usage = (Usage) asNamed;
@@ -351,7 +361,7 @@ public class LoadModel {
 				for (Integer client : clients) {
 					if(classComponent.get(idS) == classComponent.get(client)){
 						logger.info("<<"+ mapId2ClassName.get(client) + ">> and <<" + mapId2ClassName.get(idS) +" >> have a relation, but they "
-								+ "are in the same component" );
+								+ "are in the " );
 						Integer[] r = new Integer[2];
 						r[0] = client; r[1] = idS;
 						internalRelations.add(r);
@@ -377,7 +387,7 @@ public class LoadModel {
 	 * This method get what class realize the interface_.
 	 * @param interface_
 	 */
-	//TODO por que colocar a classe que realiza a interface em uma lista, se vai sempre uma classe??? (VER PQ)
+	//TODO por que colocar a classe que realiza a interface em uma lista, se vai ser sempre uma classe??? (VER PQ)
 	private ArrayList<Integer> getWhoRealizeInterfaceAndAddToList(Interface interface_) {
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (Relationship relationship : interface_.getRelationships()) {
@@ -495,7 +505,6 @@ public class LoadModel {
 		}
 	}
 
-
 	public void showSizeOfMaps(){
 		System.out.println("Classes: " + mapClassName2Id.size());
 		System.out.println("Component: " + mapComponentName2Id.size());
@@ -530,6 +539,30 @@ public class LoadModel {
 		for (Integer[] iterable_element : interfaces_) {
 			System.out.println(mapId2ClassName.get(iterable_element[0]) + "--" + mapId2ClassName.get(iterable_element[1]));
 		}
+	}
+	
+	public void showSolution(Solution solution){
+		for (Entry<Integer, Set<Integer>> element : solution.componentClasses.entrySet()) {
+			String componentName = mapId2ComponentName.get(element.getKey());
+			for (Integer class_ : element.getValue()) {
+				String className = mapId2ClassName.get(class_);
+				logger.info("Class <<" + mapClassName2Id.get(className) + ":"+ className +">> in component <<" + componentName + ">>");
+			}
+		}
+		
+		for (Integer[] interfaces : solution.interfaces) {
+			String class1 = mapId2ClassName.get(interfaces[0]);
+			String class2 = mapId2ClassName.get(interfaces[1]);
+			logger.info("Class <<" + class1 + ">> and <<" + class2 + ">> have a relationship.");
+		}
+		
+		for (Integer[] internalRelation : solution.internalRelations) {
+			String class1 = mapId2ClassName.get(internalRelation[0]);
+			String class2 = mapId2ClassName.get(internalRelation[1]);
+			logger.info("<<"+ class1 + ">> and <<" + class2 +" >> have a relation, but they "
+					+ "are in the same component" );
+		}
+
 	}
 
 }

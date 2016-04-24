@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: ExtractModel
+Bundle-SymbolicName: ExtractModel;singleton:=true
 Bundle-Version: 5.0.0.qualifier
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
@@ -9,4 +9,6 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.uml2.uml,
  org.eclipse.uml2.uml.resources,
  org.eclipse.emf.ecore,
- org.junit
+ org.junit,
+ org.eclipse.modisco.infra.discovery.core,
+ org.eclipse.modisco.doc

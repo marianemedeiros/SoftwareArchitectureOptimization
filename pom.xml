@@ -12,6 +12,14 @@
 		<sourceDirectory>src</sourceDirectory>
 	</build>
 
+	<repositories>
+		<repository>
+			<id>eclipse-acceleo</id>
+			<name>Eclipse Repository</name>
+			<url>https://repo.eclipse.org/content/groups/acceleo/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -19,7 +27,29 @@
 			<version>1.2.17</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.eclipse.core</groupId>
+			<artifactId>runtime</artifactId>
+			<version>3.9.100-v20131218-1515</version>
+		</dependency>
 
+		<dependency>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>org.eclipse.jdt.core</artifactId>
+			<version>3.9.1.v20130905-0837</version>
+		</dependency>
+		
+		<dependency>
+  			<groupId>org.eclipse.core</groupId>
+  			<artifactId>org.eclipse.core.resources</artifactId>
+  			<version>3.9.1.v20140825-1431</version>
+		</dependency>
+		<!-- 
+		<dependency> 
+			<groupId>org.eclipse.jdt</groupId> 
+			<artifactId>org.eclipse.jdt.core</artifactId> 
+			<version>3.12.0.v20160315-2126</version> 
+		</dependency> -->
 
 	</dependencies>
 </project>
