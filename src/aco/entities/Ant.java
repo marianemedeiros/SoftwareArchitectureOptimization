@@ -93,16 +93,21 @@ public class Ant {
 
 		//DONE verificar antes da combinação das classes, quais as combinações quebram a regra e quantas vezes cada classe quebra a regra
 		Penalty penalty = new Penalty();
-		if(this.initialSolution != null){
+		if(this.initialSolution != null && !this.initialSolution.type.equals("")){
 			for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
 				for (int j = 0; j < this.pheromoneMatrix.classes; j++) {
 					if(this.initialSolution.type.equals(LoadModel.LAYER)){
-						Integer comp1 = this.initialSolution.classComponent.get(i);
-						Integer comp2 = this.initialSolution.classComponent.get(j);
+						Integer comp1 = mapClassComponent.get(i);
+						Integer comp2 = mapClassComponent.get(j);
 
 						Integer l1 = this.initialSolution.componentLayer.get(comp1);
 						Integer l2 = this.initialSolution.componentLayer.get(comp2);
-
+						
+						//TODO erro no loadModel eu acho
+						for (Entry<Integer, Integer> double1 : this.initialSolution.componentLayer.entrySet()) {
+							System.err.println(double1.getKey() + " - - " + double1.getValue());
+						}
+						//System.err.println(comp1 + " -- " + comp2);
 						MetricLayerArch metricLayerArch = new MetricLayerArch();
 						penalty = metricLayerArch.verifyStyle(i, j, l1, l2, penalty);
 
@@ -118,6 +123,7 @@ public class Ant {
 					}
 				}
 			}
+			
 			if(Main.SHOW_LOGS)
 				System.out.println("INFORMAÇÂO DE PENALIDADE ---- " + penalty.classBreak.size() + " classes que quebraram a regra, " + penalty.listBadRel.size() + " más relações.");
 		}
@@ -143,23 +149,7 @@ public class Ant {
 					//DONE baseado na lista de classBreak e badRelation calcular quanto de penalidade será
 					// aplicado a combinação, passar este valor para a função calculatesProbability
 					// para que seja levado em consideração o valor da penalidade no calculo da probabilidade.
-					int aux = this.pheromoneMatrix.classClass[0].length - 1;
-					if(j != aux){// if para nao calcular penalidade caso esteja considerando
-						// a combinação com a ultima coluna, que é a coluna de não combinar a classe i com ninguém.
-						if(Main.SHOW_LOGS)
-							System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + penalty.classBreak.get(i) +
-									">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + penalty.classBreak.get(j) + ">>");
-					
-					Double h = ((penalty.classBreak.get(i) + penalty.classBreak.get(j)) / Double.valueOf(penalty.listBadRel.size()));
-					prob = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, (1 - h));
-						if(Main.SHOW_LOGS)
-							System.out.println("Valor da penalidade para combinação " + i +"-"+ j  +" = "+ h);
-					}else{// se esta considerando a ultima coluna, não combinação com nenhuma classe, então a informação
-						// da penalidade não precisa ser calculada.
-						prob = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
-						if(Main.SHOW_LOGS)
-							System.out.println("Não combinar classe " + i + " com ninguém.");
-					}
+					prob = verifyStylerArchAndCalcHeuristic(penalty, i, j);
 					
 					probsClass[x] = prob;
 					sumProbs += prob;
@@ -170,26 +160,14 @@ public class Ant {
 				}else if (i != j && twoClassInComponent(i,j,mapComponentClass)){
 					double probIntR = 0.0;
 					
-					/**
-					 * Considera o cálculo da penalidade para classes de um mesmo componente, pois no caso de CLIENTE/SERVIDOR
-					 * um componente pode ter classes SERVIDORAS e CLIENTES.
-					 * A condição do if para nao calcular a penalidade caso estaja considerando a ultima coluna da matriz
-					 * permanece.
-					 * */
-					if(j != (this.pheromoneMatrix.classClass[0].length - 1)){
-						if(Main.SHOW_LOGS)
-							System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + penalty.classBreak.get(i) +
-								">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + penalty.classBreak.get(j) + ">>");
-
-						Double h =  Double.valueOf((penalty.classBreak.get(i) + penalty.classBreak.get(j))) / Double.valueOf(penalty.listBadRel.size());
-						
-						if(Main.SHOW_LOGS)
-							System.out.println("Valor da penalidade para combinação " + i +"-"+ j  +" = "+ h);
-
-						probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, (1 - h));
-					}else{
+					// este if, pois se o estilo for camada o calculo da probabilidade interna não ira considerar informaçao heuristica
+					// pois aqui estamos verificando o relacionamento entre classes em um mesmo componente, e um componente não
+					// pode estar em duas camadas. Para cliente/servidor consideramos a informação heuristica pois classes de um componente
+					// podem ser servidoras e clientes.
+					if(this.initialSolution == null || this.initialSolution.type.equals(LoadModel.LAYER))
 						probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
-					}
+					else if (this.initialSolution.type.equals(LoadModel.CLIENT_SERVER))	
+						probIntR = verifyStylerArchAndCalcHeuristic(penalty,i,j);
 
 					probsClassIntR[y] = probIntR;
 					sumProbsIntR += probIntR;
@@ -252,6 +230,39 @@ public class Ant {
 		return  solution;
 	}
 
+
+	/**
+	 * Considera o cálculo da penalidade para classes de um mesmo componente, pois no caso de CLIENTE/SERVIDOR
+	 * um componente pode ter classes SERVIDORAS e CLIENTES.
+	 * A condição do if para nao calcular a penalidade caso estaja considerando a ultima coluna da matriz
+	 * permanece.
+	 * 
+	 * @param penalty
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	private double verifyStylerArchAndCalcHeuristic(Penalty penalty, int i, int j) {
+		double probIntR = 0.0;
+		if(j == (this.pheromoneMatrix.classClass[0].length - 1) || (penalty.classBreak.size() == 0 && penalty.listBadRel.size() == 0)){
+			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
+			if(Main.SHOW_LOGS)
+				System.out.println("Não combinar classe " + i + " com ninguém. Ou, a arquitetura não quebra nenhuma regra do estilo.");
+			
+		}else if(j != (this.pheromoneMatrix.classClass[0].length - 1)){
+			if(Main.SHOW_LOGS)
+				System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + penalty.classBreak.get(i) +
+					">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + penalty.classBreak.get(j) + ">>");
+
+			Double h =  Double.valueOf((penalty.classBreak.get(i) + penalty.classBreak.get(j))) / Double.valueOf(penalty.listBadRel.size());
+			
+			if(Main.SHOW_LOGS)
+				System.out.println("Valor da penalidade para combinação " + i +"-"+ j  +" = "+ h);
+
+			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, (1 - h));
+		}
+		return probIntR;
+	}
 
 	/**
 	 * Verify in mapComponentClass if class i and x are contained in the same component.
