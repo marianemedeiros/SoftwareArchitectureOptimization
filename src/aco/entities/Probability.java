@@ -72,6 +72,7 @@ public class Probability {
 	 */
 	public double calculatesProbability(Double[][] matriz, int line, int column, Double h) {
 		double numerador = 0;
+		//System.err.println("line " + line + "\ncolumn " + column);
 		numerador = Math.pow(matriz[line][column], Main.ALPA);
 		numerador = numerador * Math.pow(h, Main.BETA);
 

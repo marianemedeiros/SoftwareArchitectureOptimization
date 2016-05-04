@@ -111,6 +111,16 @@ public class Solution {
 		this.mapClassServer = mapClassServer;
 	}
 	
+//TODO comentário
+	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<Integer[]> interfaces,
+			ArrayList<Integer[]> internalRelations, HashMap<Integer,Integer> classComponent) {
+		this.type = "";
+		
+		this.componentClasses = componentClass;
+		this.classComponent = classComponent;
+		this.interfaces = interfaces;
+		this.internalRelations = internalRelations;
+	}
 	public void showSolution(){
 		System.out.println("\n!!!!!!!!!!!!!!!!! SHOW SOLUTION !!!!!!!!!!!!!!!!!!!!\n");
 		for (Entry<Integer, Set<Integer>> element : this.componentClasses.entrySet()) {
