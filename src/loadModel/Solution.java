@@ -111,7 +111,15 @@ public class Solution {
 		this.mapClassServer = mapClassServer;
 	}
 	
-//TODO comentário
+	/**
+	 * To instantiate a Solution with no style architecture defined:
+	 * 
+	 *  @param componentClass map with component and classes that belong to component.
+	 *  @param interfaces that doing communication between classes of different components.
+	 *  @param internalRelation relation between classes in a same component.
+	 *  @param classComponent map with class and component that this class belongs.
+	 *  
+	 * */
 	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<Integer[]> interfaces,
 			ArrayList<Integer[]> internalRelations, HashMap<Integer,Integer> classComponent) {
 		this.type = "";
