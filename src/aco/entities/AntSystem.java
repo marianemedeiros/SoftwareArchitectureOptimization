@@ -1,10 +1,14 @@
 package aco.entities;
 
+import org.apache.log4j.Logger;
+
+import loadModel.LoadModel;
 import loadModel.Solution;
 import main.Main;
 
 
 public class AntSystem {
+	private Logger logger = Logger.getLogger(LoadModel.class);
     public Colony colony;
     
 	/**
@@ -41,15 +45,29 @@ public class AntSystem {
     public Solution execute() throws Exception {
     	double sum = 0.0;
         for (int i = 0; i < Main.ITERATIONS; i++) {
-        	if(Main.SHOW_LOGS)
+        	//if(Main.SHOW_LOGS)
         		System.out.println("\n---------------    Iteration number " + i + " -----------------");
-            colony.putAntsToWork();
+            
+        	long startTime = System.currentTimeMillis();
+ 
+        	colony.putAntsToWork();
+                   	
+        	long stopTime = System.currentTimeMillis();
+        	long elapsedTime = stopTime - startTime;
+        	    
+        	if(elapsedTime > 1000 && elapsedTime < 6000)
+        	   System.out.println((int) ((elapsedTime / 1000) % 60) + " seconds.");
+        	else if(elapsedTime >= 6000)
+        		System.out.println((int) ((elapsedTime / 1000) / 60) + " minutes.");
+        	else
+        	   System.out.println(elapsedTime + " miliseconds.");
+        	    
             sum = sum + colony.getBestAnt().getSolution().mMetric;
         }
 
         System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
         System.out.println("Winner ant: " + colony.getBestAnt().getIdentidade());
-        System.out.println("Fitness function of best solution: " + colony.getValueOfBestValueFound());
+        logger.info("Fitness function of best solution: " + colony.getValueOfBestValueFound());
         System.out.println("Average of fitness function (MQ): " + (sum/Main.ITERATIONS));
 
         //colony.getBestAnt().getSolution().showSolution();
