@@ -10,7 +10,7 @@ import main.Main;
 
 public class Colony {
 
-	private double valueOfBestValueFound = 99999;
+	private double valueOfBestValueFound = 0;
 	private Ant bestAnt;
 
 	private Matrix pheromoneMatrix;
@@ -74,7 +74,7 @@ public class Colony {
 
 			//           threadExecutor.shutdown();
 
-			if (f1.getSolution().mMetric < this.valueOfBestValueFound){
+			if (f1.getSolution().mMetric > this.valueOfBestValueFound){
 				valueOfBestValueFound = f1.getSolution().mMetric;
 				bestAnt = f1;
 			}
@@ -102,7 +102,7 @@ public class Colony {
 
 		}
 
-		if(Main.SHOW_LOGS)
+		//if(Main.SHOW_LOGS)
 			System.out.println("Best solution value found: " + valueOfBestValueFound);
 
 		Matrix aux = new Matrix(this.pheromoneMatrix.components, this.pheromoneMatrix.classes, 0);
