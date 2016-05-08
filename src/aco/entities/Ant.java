@@ -102,12 +102,7 @@ public class Ant {
 
 						Integer l1 = this.initialSolution.componentLayer.get(comp1);
 						Integer l2 = this.initialSolution.componentLayer.get(comp2);
-						
-						//TODO erro no loadModel eu acho
-						for (Entry<Integer, Integer> double1 : this.initialSolution.componentLayer.entrySet()) {
-							System.err.println(double1.getKey() + " - - " + double1.getValue());
-						}
-						//System.err.println(comp1 + " -- " + comp2);
+
 						MetricLayerArch metricLayerArch = new MetricLayerArch();
 						penalty = metricLayerArch.verifyStyle(i, j, l1, l2, penalty);
 
