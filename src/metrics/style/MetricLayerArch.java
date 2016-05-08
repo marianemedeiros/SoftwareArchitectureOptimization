@@ -18,18 +18,18 @@ public class MetricLayerArch {
 	 * */
 	public Penalty verifyStyle(Integer class1, Integer class2, Integer layer1, Integer layer2, Penalty penalty){
 			if(layer2 > (layer1+1)){
-				System.out.println("layer 1 <<" + layer1 + ">>, layer2 <<" + layer2 +">>");
-
 				if(!penalty.classBreak.containsKey(class1)){
 					penalty.classBreak.put(class1, 1);
-					System.out.println(class1 + ": " + penalty.classBreak.get(class1));
 				}else{
 					penalty.classBreak.put(class1, penalty.classBreak.get(class1)+1);
-					System.out.println(penalty.classBreak.get(class1));
 				}
 				Integer[] r = new Integer[2];
 				r[0] = class1; r[1] = class2;
 				penalty.listBadRel.add(r);
+			}else{
+				if(!penalty.classBreak.containsKey(class1)){
+					penalty.classBreak.put(class1, 1);
+				}
 			}
 		return penalty;
 	}
