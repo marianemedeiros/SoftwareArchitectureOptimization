@@ -1,6 +1,8 @@
 package aco.entities;
 
-import org.apache.log4j.Logger;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 
 import loadModel.LoadModel;
 import loadModel.Solution;
@@ -8,9 +10,11 @@ import main.Main;
 
 
 public class AntSystem {
-	private Logger logger = Logger.getLogger(LoadModel.class);
+    public NumberFormat formatter = new DecimalFormat("#0.00000");
     public Colony colony;
     
+    public double mediaMq;
+    public ArrayList<Double> evolutionMq;
 	/**
 	 * Constructor when doesn't have an initial architecture
 	 * 
@@ -21,6 +25,7 @@ public class AntSystem {
 	 * */
     public AntSystem(int components, int classes) {
     	this.colony = new Colony(components, classes); // 1.8 = ro
+    	evolutionMq = new ArrayList<Double>();
 	}
 
     
@@ -34,6 +39,7 @@ public class AntSystem {
 	 * */
 	public AntSystem(Matrix p, Solution s) {
     	this.colony = new Colony(s,p);
+    	evolutionMq = new ArrayList<Double>();
 	}
 
 
@@ -44,33 +50,36 @@ public class AntSystem {
      * */
     public Solution execute() throws Exception {
     	double sum = 0.0;
+    	int interval = (Main.ITERATIONS/10);
+    	int aux = 0;
+    	
         for (int i = 0; i < Main.ITERATIONS; i++) {
         	//if(Main.SHOW_LOGS)
         		System.out.println("\n---------------    Iteration number " + i + " -----------------");
             
         	long startTime = System.currentTimeMillis();
- 
         	colony.putAntsToWork();
-                   	
         	long stopTime = System.currentTimeMillis();
-        	long elapsedTime = stopTime - startTime;
-        	    
-        	if(elapsedTime > 1000 && elapsedTime < 6000)
-        	   System.out.println((int) ((elapsedTime / 1000) % 60) + " seconds.");
-        	else if(elapsedTime >= 6000)
-        		System.out.println((int) ((elapsedTime / 1000) / 60) + " minutes.");
-        	else
-        	   System.out.println(elapsedTime + " miliseconds.");
-        	    
-            sum = sum + colony.getBestAnt().getSolution().mMetric;
+    	    System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to one iteration.");
+    	    sum = sum + colony.getBestAnt().getSolution().mMetric;
+            if(this.evolutionMq.isEmpty() || aux == interval){
+            	this.evolutionMq.add(colony.getValueOfBestValueFound());
+            	aux = 0;
+            }
+            aux++;
         }
 
         System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
         System.out.println("Winner ant: " + colony.getBestAnt().getIdentidade());
-        logger.info("Fitness function of best solution: " + colony.getValueOfBestValueFound());
-        System.out.println("Average of fitness function (MQ): " + (sum/Main.ITERATIONS));
+        
+        this.mediaMq = (sum/Main.ITERATIONS);
+        System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
+        System.out.println("Average of fitness function (MQ): " + this.mediaMq);
+        
+        
 
-        //colony.getBestAnt().getSolution().showSolution();
+        
+
         return colony.getBestAnt().getSolution();
     }
 }
