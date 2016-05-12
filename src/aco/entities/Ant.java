@@ -99,13 +99,21 @@ public class Ant {
 					if(this.initialSolution.type.equals(LoadModel.LAYER)){
 						Integer comp1 = mapClassComponent.get(i);
 						Integer comp2 = mapClassComponent.get(j);
-
+						
+						if(this.initialSolution.mapNewId2OldId != null){
+							int aux = this.initialSolution.mapNewId2OldId.get(comp1);
+							comp1 = aux;
+							int aux2 = this.initialSolution.mapNewId2OldId.get(comp2);
+							comp2 = aux2;
+						}
+						
 						Integer l1 = this.initialSolution.componentLayer.get(comp1);
 						Integer l2 = this.initialSolution.componentLayer.get(comp2);
-
-						MetricLayerArch metricLayerArch = new MetricLayerArch();
-						penalty = metricLayerArch.verifyStyle(i, j, l1, l2, penalty);
-
+						
+						if(l1 != null && l2 != null){
+							MetricLayerArch metricLayerArch = new MetricLayerArch();
+							penalty = metricLayerArch.verifyStyle(i, j, l1, l2, penalty);
+						}
 					}else if(this.initialSolution.type.equals(LoadModel.CLIENT_SERVER)){
 						String type_element0 = initialSolution.mapClassClient.get(i);
 						if(type_element0 == null) type_element0 = initialSolution.mapClassServer.get(i);
@@ -163,6 +171,8 @@ public class Ant {
 						probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
 					else if (this.initialSolution.type.equals(LoadModel.CLIENT_SERVER))	
 						probIntR = verifyStylerArchAndCalcHeuristic(penalty,i,j);
+					else if(this.initialSolution != null || this.initialSolution.type.equals(""))// sem estilo arquitetural definido
+						probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
 
 					probsClassIntR[y] = probIntR;
 					sumProbsIntR += probIntR;
@@ -249,7 +259,15 @@ public class Ant {
 				System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + penalty.classBreak.get(i) +
 					">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + penalty.classBreak.get(j) + ">>");
 
-			Double h =  Double.valueOf((penalty.classBreak.get(i) + penalty.classBreak.get(j))) / Double.valueOf(penalty.listBadRel.size());
+			Double h ;
+			if(penalty.classBreak.get(i) == null &&  penalty.classBreak.get(j) == null)
+				h = Probability.DEFAULT_VALUE_HEURISTIC;
+			else if (penalty.classBreak.get(i) == null)
+				h =  Double.valueOf(penalty.classBreak.get(j)) / Double.valueOf(penalty.listBadRel.size());
+			else if (penalty.classBreak.get(j) == null)
+				h =  Double.valueOf(penalty.classBreak.get(i)) / Double.valueOf(penalty.listBadRel.size());
+			else
+				h =  Double.valueOf((penalty.classBreak.get(i) + penalty.classBreak.get(j))) / Double.valueOf(penalty.listBadRel.size());
 			
 			if(Main.SHOW_LOGS)
 				System.out.println("Valor da penalidade para combinação " + i +"-"+ j  +" = "+ h);
