@@ -17,7 +17,9 @@ import java.util.Set;
  *
  */
 public class Solution {
-	public String type;
+	public String type =  null;
+	
+	public HashMap<Integer,Integer> mapNewId2OldId = null;
 	
 	public HashMap<Integer,Integer> componentLayer;
 	
@@ -33,7 +35,7 @@ public class Solution {
 	public double acopMetric;
 	public double mMetric; 
 	public double totalPenalty; //total de penalidades sofrida pela Solution
-
+	
 	public ArrayList<Integer[]> listBadRel; //list of elements that break rule of layered architecture style. 
 
 	public int number_comp;
