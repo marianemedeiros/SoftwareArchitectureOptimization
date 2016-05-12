@@ -63,15 +63,9 @@ public class Architecture {
 			System.out.println("Iterations: " + Main.ITERATIONS + " Ants: " + Main.ANTS + " Ro: " + Main.RO + " Alpha: " + Main.ALPA + " Beta: " + Main.BETA);
 			System.out.println(" Number of components: " + initialSolution.componentClasses.size() + "\n Number of classes: " + initialSolution.classComponent.size());
 
-			//			for (Entry<Integer, Set<Integer>> element : solution.componentClasses.entrySet()) {
-			//				System.out.println("Component: " + element.getKey());
-			//			}
-
-			//Probability probability = new Probability(new Matrix(solution.componentClasses.size(), solution.classComponent.size()));
-			//Matrix p = probability.verifyRelation(solution);
 			Matrix m = new Matrix(initialSolution.componentClasses.size(), initialSolution.classComponent.size());
 			antSystem = new AntSystem(m,initialSolution);
-		}else{// para arquiteturas com componentes e classes soltos
+		}else{// to architectures with loose components and classes.
 			System.out.println("\n No established architecture!!!");
 			antSystem = new AntSystem(this.initialSolution.number_comp, this.initialSolution.number_class);
 		}

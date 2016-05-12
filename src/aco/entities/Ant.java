@@ -73,13 +73,11 @@ public class Ant {
 			int i = 0;
 			for (int comp = 0; comp < this.pheromoneMatrix.components; comp++) {
 				double prob = this.probability.calculatesProbability(this.pheromoneMatrix.componentClass, cl, comp, Probability.DEFAULT_VALUE_HEURISTIC);
-				//System.out.println("- class " + cl + " in component " + comp + " prob is : " + prob);
 				probs[i] = prob;
 				i++;
 			}
 
 			int solutionChoose = roulette(probs);// roulette return index of best prob
-			//System.out.println("-- solutionChoosed: " + solutionChoose);
 			if(mapComponentClass.get(solutionChoose) == null){ // need declare ArrayList of classes
 				Set<Integer> classes = new HashSet<Integer>();
 				classes.add(cl);
@@ -91,7 +89,7 @@ public class Ant {
 			}
 		}
 
-		//DONE verificar antes da combinação das classes, quais as combinações quebram a regra e quantas vezes cada classe quebra a regra
+		//verify before class combination which are combinations that break rules and how many times each class break the rule.
 		Penalty penalty = new Penalty();
 		if(this.initialSolution != null && !this.initialSolution.type.equals("")){
 			for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
@@ -133,12 +131,12 @@ public class Ant {
 
 		// build matrix of Interfaces (Class x Class)
 		Double probsClass[] = new Double[this.pheromoneMatrix.classes];
-		HashMap<Integer, Integer[]> mapVetProbToMatrix = new HashMap<Integer, Integer[]>(); // this HashMap maps an prob of vector 'prob' to an index of matrix
+		HashMap<Integer, Integer[]> mapVetProbToMatrix = new HashMap<Integer, Integer[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
 		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
 
 		// build matrix of relations between classes of same component (Class x Class)
 		Double probsClassIntR[] = new Double[this.pheromoneMatrix.classes];
-		HashMap<Integer, Integer[]> mapVetProbToMatrixIntR = new HashMap<Integer, Integer[]>(); // this HashMap maps an prob of vector 'prob' to an index of matrix
+		HashMap<Integer, Integer[]> mapVetProbToMatrixIntR = new HashMap<Integer, Integer[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
 		ArrayList<Integer[]> internalRelation = new ArrayList<Integer[]>();
 
 		for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
@@ -149,9 +147,10 @@ public class Ant {
 			for (int j = 0; j < this.pheromoneMatrix.classClass[0].length; j++) {
 				if(i != j && !twoClassInComponent(i,j,mapComponentClass)){
 					double prob = 0.0;
-					//DONE baseado na lista de classBreak e badRelation calcular quanto de penalidade será
-					// aplicado a combinação, passar este valor para a função calculatesProbability
-					// para que seja levado em consideração o valor da penalidade no calculo da probabilidade.
+					/* based on the list of classBreak and badRealation i calculate how many penalty will be
+					 * attribute to the combination of two classes, so pass the value to the function calculatesProbability()
+					 * so that value can be considered in the calculation of probability.
+					 * */
 					prob = verifyStylerArchAndCalcHeuristic(penalty, i, j);
 					
 					probsClass[x] = prob;
@@ -162,16 +161,18 @@ public class Ant {
 					x++;
 				}else if (i != j && twoClassInComponent(i,j,mapComponentClass)){
 					double probIntR = 0.0;
-					
-					// este if, pois se o estilo for camada o calculo da probabilidade interna não ira considerar informaçao heuristica
-					// pois aqui estamos verificando o relacionamento entre classes em um mesmo componente, e um componente não
-					// pode estar em duas camadas. Para cliente/servidor consideramos a informação heuristica pois classes de um componente
-					// podem ser servidoras e clientes.
+					/* if the architectural style is LAYERED, the calculation of probability, to relation between classes which are in the same
+					 * component, will not consider the heuristic information. Because, we are considering relation between two classes in the same component
+					 * and one component only can be in one layer.
+					 * 
+					 *  if the architectural style is CLIENT/SERVER, heuristic information will be considered, because classes in the same component
+					 *  can be client or server.
+					 * */
 					if(this.initialSolution == null || this.initialSolution.type.equals(LoadModel.LAYER))
 						probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
 					else if (this.initialSolution.type.equals(LoadModel.CLIENT_SERVER))	
 						probIntR = verifyStylerArchAndCalcHeuristic(penalty,i,j);
-					else if(this.initialSolution != null || this.initialSolution.type.equals(""))// sem estilo arquitetural definido
+					else if(this.initialSolution != null || this.initialSolution.type.equals(""))// without architecture style
 						probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
 
 					probsClassIntR[y] = probIntR;
@@ -237,10 +238,11 @@ public class Ant {
 
 
 	/**
-	 * Considera o cálculo da penalidade para classes de um mesmo componente, pois no caso de CLIENTE/SERVIDOR
-	 * um componente pode ter classes SERVIDORAS e CLIENTES.
-	 * A condição do if para nao calcular a penalidade caso estaja considerando a ultima coluna da matriz
-	 * permanece.
+	 * Consider penalty calculation to classes in the same component, because in CLIENT/SERVER style one component may have
+	 * server and clients classes.
+	 *
+	 * Not calculate penalty if j are the last column of matrix (this column represent probability of does not combine the class with 
+	 * anyone).
 	 * 
 	 * @param penalty
 	 * @param i

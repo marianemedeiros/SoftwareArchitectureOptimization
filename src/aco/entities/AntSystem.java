@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-import loadModel.LoadModel;
 import loadModel.Solution;
 import main.Main;
 
@@ -76,10 +75,6 @@ public class AntSystem {
         System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
         System.out.println("Average of fitness function (MQ): " + this.mediaMq);
         
-        
-
-        
-
         return colony.getBestAnt().getSolution();
     }
 }
