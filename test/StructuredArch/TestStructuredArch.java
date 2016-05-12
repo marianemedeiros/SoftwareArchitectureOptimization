@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import aco.entities.AntSystem;
 import aco.entities.Matrix;
+import aco.entities.Parametro;
 import aco.entities.Probability;
 import architecture.ArchitectureExample;
 
@@ -24,7 +25,8 @@ import architecture.ArchitectureExample;
  *
  */
 public class TestStructuredArch {
-
+	public Parametro parametros = new Parametro(20, 10, 0.2, 0.9, 0.0);
+	
 	@Test
 	public void test1() throws Exception {
 		String path = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo em Camada/ModeloCamada";
@@ -33,9 +35,9 @@ public class TestStructuredArch {
 		
 		Solution solution = loadModel.buildSoluction();
 		
-		Probability probability = new Probability(new Matrix(solution.componentClasses.size(), solution.classComponent.size()));
+		Probability probability = new Probability(new Matrix(solution.componentClasses.size(), solution.classComponent.size()),parametros);
 		Matrix p = probability.verifyRelation(solution);
-		AntSystem antSystem = new AntSystem(p,solution);
+		AntSystem antSystem = new AntSystem(p,solution,parametros);
 	}
 	@Test
 	public void test() throws Exception {
@@ -52,14 +54,14 @@ public class TestStructuredArch {
 		// então chama a função calculatesProbability que vai fazer o calculo das combinações já
 		// existentes na Soluction e irá atualizar a matriz de ferômonio. Retornando a matriz de ferômonio 
 		// condizente com a arquitetura já existente.
-		Probability probability = new Probability(new Matrix(s.componentClasses.size(), s.classComponent.size()));
+		Probability probability = new Probability(new Matrix(s.componentClasses.size(), s.classComponent.size()),parametros);
 		
 		Matrix p = probability.verifyRelation(s);
 		assertEquals(s.componentClasses.size(), p.componentClass[0].length);
 		assertEquals(s.classComponent.size(), p.classClass.length);
 		
 		// instancia a classe AntSystem passando a arquitetura inicial
-		AntSystem antSystem = new AntSystem(p,s);
+		AntSystem antSystem = new AntSystem(p,s,parametros);
 		antSystem.execute();
 		
 		// calculate metrics to this soluction

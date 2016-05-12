@@ -628,15 +628,13 @@ public class LoadModel {
 				file.newLine();
 		}
 		
-		System.err.println(solution.type);
-		if(solution.type != null){
+		if(solution.componentLayer != null){
 			for (Entry<Integer, Integer> element : solution.componentLayer.entrySet()) {
 				String componentName = mapId2ComponentName.get(element.getKey());	
 				file.write("Component <<" + componentName + ">> in layer <<" + mapId2LayerName.get(element.getValue()) + ">>");
 				file.newLine();
 			}
 		}
-
 	}
 
 	public void showComponents(Solution solution){

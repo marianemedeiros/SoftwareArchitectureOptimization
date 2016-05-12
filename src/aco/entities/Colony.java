@@ -15,7 +15,7 @@ public class Colony {
 
 	private Matrix pheromoneMatrix;
 	private Solution initialSoluction = null;
-
+	private Parametro parametros;
 	/**
 	 * Constructor when doesn't have an initial architecture
 	 * 
@@ -24,7 +24,8 @@ public class Colony {
 	 * @param comp number of components
 	 * @param cl number of classes
 	 * */
-	public Colony(int comp, int cl) {
+	public Colony(int comp, int cl, Parametro p) {
+		this.parametros = p;
 		// declare pheromeMatrix (class x compontet and class x class) and init that.
 		this.pheromoneMatrix = new Matrix(comp, cl);
 	}
@@ -37,7 +38,8 @@ public class Colony {
 	 * @param ants number of ants will work in the colony
 	 * @param r rho constant
 	 * */
-	public Colony(Solution s, Matrix p){
+	public Colony(Solution s, Matrix p, Parametro param){
+		this.parametros = param;
 		this.pheromoneMatrix = p;
 		this.initialSoluction = s;
 	}
@@ -48,13 +50,13 @@ public class Colony {
 	 * solution found.
 	 * */
 	public Colony putAntsToWork(){   
-		for (int i = 0; i < Main.ANTS; i++){
+		for (int i = 0; i < parametros.ANTS; i++){
 			//           ExecutorService threadExecutor = Executors.newFixedThreadPool(4);
 			Ant f1;
 			if(this.initialSoluction != null)
-				f1 = new Ant(this.getPheromoneMatrix(),this.initialSoluction);
+				f1 = new Ant(this.getPheromoneMatrix(),this.initialSoluction,this.parametros);
 			else
-				f1 = new Ant(this.getPheromoneMatrix());
+				f1 = new Ant(this.getPheromoneMatrix(),this.parametros);
 			f1.buildSolution();
 			//			ThreadBuildSoluction t1 = new ThreadBuildSoluction(f1);
 
@@ -121,7 +123,7 @@ public class Colony {
 			for (int j = 0; j < aux.componentClass[0].length; j++) {
 				if(aux.componentClass[i][j] != 1.0){
 					double tau = this.getPheromoneMatrix().componentClass[i][j];
-					this.pheromoneMatrix.componentClass[i][j] = (1 - Main.RO) * tau;
+					this.pheromoneMatrix.componentClass[i][j] = (1 - parametros.RO) * tau;
 				}
 			}
 		}
@@ -130,7 +132,7 @@ public class Colony {
 			for (int j = 0; j < aux.classClass.length; j++) {
 				if(aux.classClass[i][j] != 1.0){
 					double tau = this.getPheromoneMatrix().classClass[i][j];
-					this.pheromoneMatrix.classClass[i][j] = (1 - Main.RO) * tau;
+					this.pheromoneMatrix.classClass[i][j] = (1 - parametros.RO) * tau;
 				}
 			}
 		}
@@ -151,7 +153,7 @@ public class Colony {
 
 			for (Integer indexClass : element.getValue()) {
 				this.getPheromoneMatrix().componentClass[indexClass][indexComp] = 
-						(1 -  Main.RO) * this.getPheromoneMatrix().componentClass[indexClass][indexComp]
+						(1 -  parametros.RO) * this.getPheromoneMatrix().componentClass[indexClass][indexComp]
 								+  this.bestAnt.getSolution().mMetric;
 				aux.componentClass[indexClass][indexComp] = 1.0;
 			}
@@ -159,14 +161,14 @@ public class Colony {
 
 		for (Integer[] integers : interfaces) {
 			this.getPheromoneMatrix().classClass[integers[0]][integers[1]] = 
-					(1 -  Main.RO) * this.getPheromoneMatrix().classClass[integers[0]][integers[1]]
+					(1 -  parametros.RO) * this.getPheromoneMatrix().classClass[integers[0]][integers[1]]
 							+  this.bestAnt.getSolution().mMetric;
 			aux.classClass[integers[0]][integers[1]] = 1.0;
 		}
 
 		for (Integer[] integers : internalRelations) {
 			this.getPheromoneMatrix().classClass[integers[0]][integers[1]] = 
-					(1 -  Main.RO) * this.getPheromoneMatrix().classClass[integers[0]][integers[1]]
+					(1 -  parametros.RO) * this.getPheromoneMatrix().classClass[integers[0]][integers[1]]
 							+  this.bestAnt.getSolution().mMetric;
 			aux.classClass[integers[0]][integers[1]] = 1.0;
 		}

@@ -40,19 +40,19 @@ public class Ant {
 
 	private Probability probability;
 
-	public Ant(Matrix pheromone) {
+	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
 		idDaFormiga = idDaFormiga + 1;
 		this.identidade = idDaFormiga;
-		probability = new Probability();
+		probability = new Probability(p);
 	}
 
-	public Ant(Matrix pheromone, Solution s) {
+	public Ant(Matrix pheromone, Solution s, Parametro p) {
 		this.pheromoneMatrix = pheromone;
 		idDaFormiga = idDaFormiga + 1;
 		this.identidade = idDaFormiga;
 		this.initialSolution = s;
-		probability = new Probability();
+		probability = new Probability(p);
 	}
 
 	/**

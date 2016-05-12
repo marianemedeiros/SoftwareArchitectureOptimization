@@ -8,7 +8,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import loadModel.Solution;
-import main.Main;
 
 /**
  * @author mariane
@@ -18,12 +17,14 @@ public class Probability {
 	public static final Double DEFAULT_VALUE_HEURISTIC = 1.0;
 
 	private Matrix matrix;
+	private Parametro parametros;
 	
-	public Probability(){
-		
+	public Probability(Parametro p ){
+		this.parametros = p;
 	}
 	
-	public Probability(Matrix pMatrix){
+	public Probability(Matrix pMatrix, Parametro p){
+		this.parametros = p;
 		matrix = pMatrix;
 	}
 	
@@ -73,12 +74,12 @@ public class Probability {
 	public double calculatesProbability(Double[][] matriz, int line, int column, Double h) {
 		double numerador = 0;
 		//System.err.println("line " + line + "\ncolumn " + column);
-		numerador = Math.pow(matriz[line][column], Main.ALPA);
-		numerador = numerador * Math.pow(h, Main.BETA);
+		numerador = Math.pow(matriz[line][column], parametros.ALPA);
+		numerador = numerador * Math.pow(h, parametros.BETA);
 
 		double denominador = 0;
 		for (int i = 0; i < matriz[0].length; i++) 
-			denominador = denominador + (( Math.pow(matriz[line][i], Main.ALPA) * Math.pow(h, Main.BETA)));
+			denominador = denominador + (( Math.pow(matriz[line][i], parametros.ALPA) * Math.pow(h, parametros.BETA)));
 	
 		return (denominador != 0 ? (numerador / denominador) : 0);
 	}
