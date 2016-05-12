@@ -3,10 +3,12 @@
  */
 package aco.entities;
 
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 import loadModel.LoadModel;
 import loadModel.Solution;
@@ -14,8 +16,6 @@ import main.Main;
 import metrics.architecture.MetricCoesion;
 import metrics.architecture.MetricCoupling;
 import metrics.architecture.ModulatizationQuality;
-
-import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.uml2.uml.resource.UMLResource;
 
@@ -24,100 +24,114 @@ import org.eclipse.uml2.uml.resource.UMLResource;
  *
  */
 public class Architecture {
-	private Logger logger = Logger.getLogger(LoadModel.class);
-	
+	public NumberFormat formatter = new DecimalFormat("#0.00000");
+	private String nameFile;
 	private LoadModel loadModel;
 	private AntSystem antSystem;
-	private Solution solution;
-	
+	private Solution initialSolution;
+
 	public Architecture(String pathUmlFile, String nameFile) throws Exception {
-		loadModel = new LoadModel(URI.createFileURI(pathUmlFile).appendSegment(nameFile).
-				appendFileExtension(UMLResource.FILE_EXTENSION));
-		
-	    long startTime = System.currentTimeMillis();
-	    solution = loadModel.buildSoluction();
-	    long stopTime = System.currentTimeMillis();
-	    long elapsedTime = stopTime - startTime;
-	    
-	    if(elapsedTime > 1000 && elapsedTime < 6000)
-	    	System.out.println((int) ((elapsedTime / 1000) % 60) + " seconds, to recovery the architecture.");
-	    else if(elapsedTime >= 6000)
-    		System.out.println((int) ((elapsedTime / 1000) / 60) + " minutes, to recovery the architecture..");
-	    else
-	    	System.out.println(elapsedTime + " miliseconds, to recovery the architecture.");
-	    
+		this.nameFile = nameFile;
+		loadModel = new LoadModel(URI.createFileURI(pathUmlFile).appendSegment(nameFile).appendFileExtension(UMLResource.FILE_EXTENSION));
 
+		long startTime = System.currentTimeMillis();
+		initialSolution = loadModel.buildSoluction();
+		long stopTime = System.currentTimeMillis();
+		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to extract architecture");
 
-	    
-	    HashMap<Integer, Integer> id2newId;
-		//para quando tem pacotes que estao vazios, pois dentro deles só tem mais pacotes
-		if(loadModel.getMapId2ClassName().size() > solution.componentClasses.size()){
-			int x = 0;
-			id2newId = new HashMap<Integer, Integer>();
-			HashMap<Integer, Set<Integer>> novoMapcomponentClass = new HashMap<Integer, Set<Integer>>();
-			for (Entry<Integer, Set<Integer>> element : solution.componentClasses.entrySet()) {
-//				System.out.println("Component: " + element.getKey());
-				id2newId.put(x, element.getKey());
-				novoMapcomponentClass.put(x, element.getValue());
-				x++;
-			}
-			solution.componentClasses = novoMapcomponentClass;
-		}
-		
-		
-		
-//		loadModel.showSizeOfMaps();
+		saveExtractArch(initialSolution,nameFile + "_"+"modeloExtraido");
+
 	}
 
 	public void initAntSystem() throws Exception{
-		if(this.solution.interfaces != null && this.solution.internalRelations != null){// arquitetura ja estruturada
+		if(this.initialSolution.interfaces != null && this.initialSolution.internalRelations != null){// arquitetura ja estruturada
 			MetricCoupling coupling = new MetricCoupling();
-			this.solution = coupling.calculate(solution);
+			this.initialSolution = coupling.calculate(initialSolution);
 
 			MetricCoesion coesion = new MetricCoesion();
-			this.solution = coesion.calculate(solution);
+			this.initialSolution = coesion.calculate(initialSolution);
 
 			ModulatizationQuality  modulatizationQuality = new ModulatizationQuality();
-			this.solution = modulatizationQuality.calculate(solution);
+			this.initialSolution = modulatizationQuality.calculate(initialSolution);
 
-			if(this.solution.type.equals(""))
+			if(this.initialSolution.type.equals(""))
 				System.out.println("\n Initial Architecture Defined without any style architectural!!!");
 			else
-				System.out.println("\n Initial Architecture Defined!!! \n So architecture style that will be evaluated is <<" + this.solution.type + ">>");
+				System.out.println("\n Initial Architecture Defined!!! \n So architecture style that will be evaluated is <<" + this.initialSolution.type + ">>");
 
-			
-			logger.info(" Modularization Qualidaty of that architecture: " + this.solution.mMetric);
-			logger.info("Iterations: " + Main.ITERATIONS + " Ants: " + Main.ANTS + " Ro: " + Main.RO + " Alpha: " + Main.ALPA + " Beta: " + Main.BETA);
-			System.out.println(" Number of components: " + solution.componentClasses.size() + "\n Number of classes: " + solution.classComponent.size());
-			
-//			for (Entry<Integer, Set<Integer>> element : solution.componentClasses.entrySet()) {
-//				System.out.println("Component: " + element.getKey());
-//			}
-			
+			System.out.println(" Modularization Qualidaty of that architecture: " + this.initialSolution.mMetric);
+			System.out.println("Iterations: " + Main.ITERATIONS + " Ants: " + Main.ANTS + " Ro: " + Main.RO + " Alpha: " + Main.ALPA + " Beta: " + Main.BETA);
+			System.out.println(" Number of components: " + initialSolution.componentClasses.size() + "\n Number of classes: " + initialSolution.classComponent.size());
+
+			//			for (Entry<Integer, Set<Integer>> element : solution.componentClasses.entrySet()) {
+			//				System.out.println("Component: " + element.getKey());
+			//			}
+
 			//Probability probability = new Probability(new Matrix(solution.componentClasses.size(), solution.classComponent.size()));
 			//Matrix p = probability.verifyRelation(solution);
-			Matrix m = new Matrix(solution.componentClasses.size(), solution.classComponent.size());
-			antSystem = new AntSystem(m,solution);
-			logger.info("\n");
+			Matrix m = new Matrix(initialSolution.componentClasses.size(), initialSolution.classComponent.size());
+			antSystem = new AntSystem(m,initialSolution);
 		}else{// para arquiteturas com componentes e classes soltos
-
 			System.out.println("\n No established architecture!!!");
-			antSystem = new AntSystem(this.solution.number_comp, this.solution.number_class);
+			antSystem = new AntSystem(this.initialSolution.number_comp, this.initialSolution.number_class);
 		}
-		
-		long startTime = System.currentTimeMillis();
-		
-		Solution generatedSolution = antSystem.execute();
-		
-		long stopTime = System.currentTimeMillis();
-	    long elapsedTime = stopTime - startTime;
 
-	    if(elapsedTime > 1000 && elapsedTime < 6000)
-	    	System.out.println((int) ((elapsedTime / 1000) % 60) + " seconds to optimize architecture.");
-	    else if(elapsedTime >= 6000)
-    		System.out.println((int) ((elapsedTime / 1000) / 60) + " minutes to optimize architecture.");
-	    else
-	    	System.out.println(elapsedTime + " miliseconds to optimize architecture.");
-		//loadModel.showSolution(generatedSolution);
+		long startTime = System.currentTimeMillis();
+		Solution generatedSolution = antSystem.execute();
+		long stopTime = System.currentTimeMillis();
+		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.");
+		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+Main.ITERATIONS +"_" +Main.ANTS+"_"+Main.RO+"_"+Main.ALPA+"_"+Main.BETA);
+		System.out.println("\n");
+
+		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados");
 	}
+
+	private void saveExtractArch(Solution s, String nameFile) throws IOException {
+		try{
+			File file = new File(Main.main, nameFile);
+			FileWriter fileWriter = new FileWriter(file);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+			loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId);
+			bufferedWriter.close();
+		}catch(IOException ex){
+			ex.printStackTrace();
+		}
+	}
+
+	private void saveValues(Solution s, double d, String nameFile) throws IOException {
+		try{
+			File file = new File(Main.main, nameFile);
+			FileWriter fileWriter = new FileWriter(file,true);
+			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+			bufferedWriter.write("Iterations: " + Main.ITERATIONS);
+			bufferedWriter.newLine();	            
+			bufferedWriter.write("Ants:" + Main.ANTS);
+			bufferedWriter.newLine();
+			bufferedWriter.write("RO: " + Main.RO);
+			bufferedWriter.newLine();
+			bufferedWriter.write("ALPA: " + Main.ALPA);
+			bufferedWriter.newLine();
+			bufferedWriter.write("BETA: " + Main.BETA);
+			bufferedWriter.newLine();
+			bufferedWriter.write("MQ Inicial: " + initialSolution.mMetric);
+			bufferedWriter.newLine();
+			bufferedWriter.write("MQ: " + s.mMetric);
+			bufferedWriter.newLine();
+			bufferedWriter.write("Media MQ: " + antSystem.mediaMq);
+			bufferedWriter.newLine();
+			
+			for (int i = 0; i < antSystem.evolutionMq.size(); i++) {
+				bufferedWriter.write("-- Iteration " + (i*(Main.ITERATIONS/10)) + " MQ value: " + antSystem.evolutionMq.get(i));
+				bufferedWriter.newLine();
+			}
+			
+			bufferedWriter.write("Time Execution: " + formatter.format(d));
+			bufferedWriter.newLine();
+			bufferedWriter.newLine();
+			bufferedWriter.close();
+		}catch(IOException ex){
+			ex.printStackTrace();
+		}
+	}	
 }
