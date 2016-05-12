@@ -73,6 +73,7 @@ public class Architecture {
 		long startTime = System.currentTimeMillis();
 		Solution generatedSolution = antSystem.execute();
 		long stopTime = System.currentTimeMillis();
+		generatedSolution.showSolution();
 		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.");
 		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+Main.ITERATIONS +"_" +Main.ANTS+"_"+Main.RO+"_"+Main.ALPA+"_"+Main.BETA);
 		System.out.println("\n");
@@ -113,6 +114,11 @@ public class Architecture {
 			bufferedWriter.write("MQ: " + s.mMetric);
 			bufferedWriter.newLine();
 			bufferedWriter.write("Media MQ: " + antSystem.mediaMq);
+			bufferedWriter.newLine();
+			
+			bufferedWriter.write("Quantidade componentes: " + s.componentClasses.size());
+			bufferedWriter.newLine();
+			bufferedWriter.write("Quantidade de classes: " + s.classComponent.size());
 			bufferedWriter.newLine();
 			
 			for (int i = 0; i < antSystem.evolutionMq.size(); i++) {
