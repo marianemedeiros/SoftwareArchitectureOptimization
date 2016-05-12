@@ -597,7 +597,7 @@ public class LoadModel {
 	
 	public void showSolution(Solution solution, BufferedWriter file, HashMap<Integer, Integer> mapNewId2OldId) throws IOException{
 		for (Entry<Integer, Set<Integer>> element : solution.componentClasses.entrySet()) {
-			int id = 0;
+			int id = element.getKey();
 			if(mapNewId2OldId != null){
 				int aux = mapNewId2OldId.get(element.getKey());
 				id = aux;
@@ -626,6 +626,15 @@ public class LoadModel {
 			//		+ "are in the same component" );
 				file.write("<<"+ class1 + ">> and <<" + class2 +" >> have a relation, but they " + "are in the same component" );
 				file.newLine();
+		}
+		
+		System.err.println(solution.type);
+		if(solution.type != null){
+			for (Entry<Integer, Integer> element : solution.componentLayer.entrySet()) {
+				String componentName = mapId2ComponentName.get(element.getKey());	
+				file.write("Component <<" + componentName + ">> in layer <<" + mapId2LayerName.get(element.getValue()) + ">>");
+				file.newLine();
+			}
 		}
 
 	}
