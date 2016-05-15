@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import aco.entities.Penalty;
+
 /**
  * <code>Solution</code> is an element that include all things that represents an architecture. Maps that associate
  * class and components, components and layers and lists that contains relations between classes. Besides that, this
@@ -20,6 +22,7 @@ public class Solution {
 	public String type =  null;
 	
 	public HashMap<Integer,Integer> mapNewId2OldId = null;
+	public HashMap<Integer,Integer> mapOldId2NewId = null;
 	
 	public HashMap<Integer,Integer> componentLayer;
 	
@@ -36,8 +39,8 @@ public class Solution {
 	public double mMetric; 
 	public double totalPenalty; //total de penalidades sofrida pela Solution
 	
-	public ArrayList<Integer[]> listBadRel; //list of elements that break rule of layered architecture style. 
-
+	public Penalty penaltysOfSolution = null;
+	public double totalOfPenalties = 0.0;
 	public int number_comp;
 	public int number_class;
 	
@@ -84,6 +87,7 @@ public class Solution {
 		
 		this.componentLayer = componentLayer;
 		this.classComponent = classComponent;
+		this.penaltysOfSolution = new Penalty();
 	}
 	
 	/**
@@ -111,6 +115,7 @@ public class Solution {
 		
 		this.mapClassClient = mapClassClient;
 		this.mapClassServer = mapClassServer;
+		this.penaltysOfSolution = new Penalty();
 	}
 	
 	/**
@@ -130,6 +135,7 @@ public class Solution {
 		this.classComponent = classComponent;
 		this.interfaces = interfaces;
 		this.internalRelations = internalRelations;
+		this.penaltysOfSolution = new Penalty();
 	}
 	public void showSolution(){
 		System.out.println("\n!!!!!!!!!!!!!!!!! SHOW SOLUTION !!!!!!!!!!!!!!!!!!!!\n");
