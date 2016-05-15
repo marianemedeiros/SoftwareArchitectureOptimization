@@ -3,12 +3,12 @@
  */
 package aco.entities;
 
+
 /**
  * @author mariane
  *
  */
 public class Parametro {
-
 	public int ITERATIONS = 20;
 	public int ANTS = 10;
 	public double RO = 0.2; //used in uptadePheromone() at class Colony.
