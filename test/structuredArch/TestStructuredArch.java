@@ -1,7 +1,7 @@
 /**
  * 
  */
-package StructuredArch;
+package structuredArch;
 
 import static org.junit.Assert.*;
 import loadModel.LoadModel;

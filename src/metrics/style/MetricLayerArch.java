@@ -30,7 +30,7 @@ public class MetricLayerArch {
 				}
 				Integer[] r = new Integer[2];
 				r[0] = class1; r[1] = class2;
-				penalty.listBadRel.add(r);
+					penalty.listBadRel.add(r);
 			}
 		return penalty;
 	}
