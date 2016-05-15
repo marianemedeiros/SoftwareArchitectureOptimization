@@ -85,7 +85,7 @@ public class Architecture {
 			File file = new File(Main.main, nameFile);
 			FileWriter fileWriter = new FileWriter(file);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId);
+			loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId, this.initialSolution.mapOldId2NewId);
 			bufferedWriter.close();
 		}catch(IOException ex){
 			ex.printStackTrace();
@@ -119,6 +119,13 @@ public class Architecture {
 			bufferedWriter.newLine();
 			bufferedWriter.write("Quantidade de classes: " + s.classComponent.size());
 			bufferedWriter.newLine();
+			
+			if(s.type != null || s.type != ""){
+				bufferedWriter.write("Total of relation penalized: " + s.penaltysOfSolution.listBadRel.size());
+				bufferedWriter.newLine();	
+				bufferedWriter.write("Total of penalties: " + s.totalOfPenalties);
+				bufferedWriter.newLine();
+			}
 			
 			for (int i = 0; i < antSystem.evolutionMq.size(); i++) {
 				bufferedWriter.write("-- Iteration " + (i*(parametros.ITERATIONS/10)) + " MQ value: " + antSystem.evolutionMq.get(i));
