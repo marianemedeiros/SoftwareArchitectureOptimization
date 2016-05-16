@@ -40,7 +40,8 @@ public class Solution {
 	public double totalPenalty; //total de penalidades sofrida pela Solution
 	
 	public Penalty penaltysOfSolution = null;
-	public double totalOfPenalties = 0.0;
+	public double totalOfPenalties = 0.0; // h
+	public double totalOfPenalties2 = 0.0; // 1 - h
 	public int number_comp;
 	public int number_class;
 	
