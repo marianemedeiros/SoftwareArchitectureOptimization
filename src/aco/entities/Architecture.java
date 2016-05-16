@@ -78,7 +78,8 @@ public class Architecture {
 		generatedSolution.showSolution();
 		
 		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.");
-		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"+parametros.BETA);
+		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"+parametros.BETA
+				+ "_" + stopTime);
 		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados");
 	}
 
