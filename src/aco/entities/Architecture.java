@@ -7,8 +7,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.concurrent.TimeUnit;
 
 import loadModel.LoadModel;
 import loadModel.Solution;
@@ -16,6 +18,7 @@ import main.Main;
 import metrics.architecture.MetricCoesion;
 import metrics.architecture.MetricCoupling;
 import metrics.architecture.ModulatizationQuality;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.uml2.uml.resource.UMLResource;
 
@@ -75,6 +78,7 @@ public class Architecture {
 		Solution generatedSolution = antSystem.execute();
 		long stopTime = System.currentTimeMillis();
 		generatedSolution.showSolution();
+		
 		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.");
 		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"+parametros.BETA);
 		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados");
@@ -123,7 +127,9 @@ public class Architecture {
 			if(s.type != null || s.type != ""){
 				bufferedWriter.write("Total of relation penalized: " + s.penaltysOfSolution.listBadRel.size());
 				bufferedWriter.newLine();	
-				bufferedWriter.write("Total of penalties: " + s.totalOfPenalties);
+				bufferedWriter.write("Total of penalties (h): " + s.totalOfPenalties);
+				bufferedWriter.newLine();
+				bufferedWriter.write("Total of penalties (1 - h): " + s.totalOfPenalties2);
 				bufferedWriter.newLine();
 			}
 			
