@@ -7,10 +7,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.concurrent.TimeUnit;
 
 import loadModel.LoadModel;
 import loadModel.Solution;
@@ -86,7 +84,7 @@ public class Architecture {
 
 	private void saveExtractArch(Solution s, String nameFile) throws IOException {
 		try{
-			File file = new File(Main.main, nameFile);
+			File file = new File(Main.results, nameFile);
 			FileWriter fileWriter = new FileWriter(file);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId, this.initialSolution.mapOldId2NewId);
@@ -98,7 +96,7 @@ public class Architecture {
 
 	private void saveValues(Solution s, double d, String nameFile) throws IOException {
 		try{
-			File file = new File(Main.main, nameFile);
+			File file = new File(Main.results, nameFile);
 			FileWriter fileWriter = new FileWriter(file,true);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
