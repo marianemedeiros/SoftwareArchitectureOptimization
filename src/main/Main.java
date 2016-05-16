@@ -1,5 +1,6 @@
 package main;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import aco.entities.Architecture;
@@ -8,15 +9,16 @@ import aco.entities.Parametro;
 public class Main {
 	public static boolean SHOW_LOGS = false; 
 	
-	public static String main = "/home/mariane/Dropbox/TCC-Mariane/resultados/";
-	public static String path = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo em Camada/ModeloCamada";
-	public static String pathSS = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo em Camada/ModeloCamadaSemStyle";
-	public static String path1 = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/Estilo ClienteServidor/ModeloClienteServidor3";
-	public static String path2 = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/elementosSoltos";
+	public static String results = "/home/mariane/Dropbox/TCC-Mariane/resultados/";
+
+	public static String path = "/modelos_UML/Estilo_em_Camada/ModeloCamada";
+	public static String pathSS = "/modelos_UML/Estilo_em_Camada/ModeloCamadaSemStyle";
+	public static String path1 = "/modelos_UML/Estilo_ClienteServidor/ModeloClienteServidor3";
+	public static String path2 = "/modelos_UML/elementosSoltos";
 	
-	public static String apacheAnt = "/home/mariane/Dropbox/TCC-Mariane/modelos UML";
-	public static String apacheAntStyle = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/ApacheAnt11Style";
-	public static String apacheAnt13Style = "/home/mariane/Dropbox/TCC-Mariane/modelos UML/ApacheAnt13Style";
+	public static String apacheAnt = "/modelos_UML";
+	public static String apacheAntStyle = "/modelos_UML/ApacheAnt11Style";
+	public static String apacheAnt13Style = "/modelo_UML/ApacheAnt13Style";
 	
 	public static String ant11 = "apache-ant11";
 	public static String ant16 = "apache-ant16";
@@ -28,7 +30,10 @@ public class Main {
 	public static String ant13Style = "apache-ant13Style";
 	
 	public static void main(String[] args) throws Exception {
-		/*
+		 File file = new java.io.File("");   //Dummy file
+		 String  abspath = file.getAbsolutePath();
+
+		 /*
 		if(args.length != 0){
 			ITERATIONS = Integer.valueOf(args[0]);
 			ANTS = Integer.valueOf(args[1]);
@@ -78,7 +83,7 @@ public class Main {
 		parametros.add(parametro18);
 		
 		for (Parametro parametro : parametros) {
-			Architecture architecture = new Architecture(apacheAntStyle,ant11Style,parametro);// arquitetura do apache-ant sem estilo
+			Architecture architecture = new Architecture(abspath+apacheAntStyle,ant11Style,parametro);// arquitetura do apache-ant sem estilo
 			architecture.initAntSystem();
 			System.out.println("-------------------------------------------------------------------------------------------------");
 		}
@@ -123,7 +128,7 @@ public class Main {
 		parametros.add(parametro188);
 		
 		for (Parametro parametro : parametros2) {
-			Architecture architecture = new Architecture(apacheAnt,ant11,parametro);// arquitetura do apache-ant sem estilo
+			Architecture architecture = new Architecture(abspath+apacheAnt,ant11,parametro);// arquitetura do apache-ant sem estilo
 			architecture.initAntSystem();
 			System.out.println("-------------------------------------------------------------------------------------------------");
 		}
