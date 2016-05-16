@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_sqrEUPjQEeW4Casd4AfdsQ" name="ArchiteturalStyle" metaclassReference="_sq2qgPjQEeW4Casd4AfdsQ">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_srBpoPjQEeW4Casd4AfdsQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_8YY6YPjQEeW4Casd4AfdsQ" name="ArchiteturalStyle" nsURI="http:///schemas/ArchiteturalStyle/_8YYTUPjQEeW4Casd4AfdsQ/1" nsPrefix="ArchiteturalStyle">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8YaIgfjQEeW4Casd4AfdsQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8YaIgvjQEeW4Casd4AfdsQ" key="Version" value="0.0.2"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8YaIg_jQEeW4Casd4AfdsQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8YaIhPjQEeW4Casd4AfdsQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8YaIhfjQEeW4Casd4AfdsQ" key="Date" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8YaIhvjQEeW4Casd4AfdsQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_8YY6YfjQEeW4Casd4AfdsQ" name="Server">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8YY6YvjQEeW4Casd4AfdsQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_squHoPjQEeW4Casd4AfdsQ"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_8YY6Y_jQEeW4Casd4AfdsQ" name="base_Classifier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Classifier"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_8YY6ZfjQEeW4Casd4AfdsQ" name="Client">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8YY6ZvjQEeW4Casd4AfdsQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_8YSzwPjQEeW4Casd4AfdsQ"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_8YY6Z_jQEeW4Casd4AfdsQ" name="base_Classifier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Classifier"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+    <contents xmi:type="ecore:EPackage" xmi:id="_srBpofjQEeW4Casd4AfdsQ" name="ArchiteturalStyle" nsURI="http:///schemas/ArchiteturalStyle/_sq9_QPjQEeW4Casd4AfdsQ/0" nsPrefix="ArchiteturalStyle">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_srEF4PjQEeW4Casd4AfdsQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_srEF4fjQEeW4Casd4AfdsQ" key="Version" value="0.0.1"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_srEF4vjQEeW4Casd4AfdsQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_srEF4_jQEeW4Casd4AfdsQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_srEF5PjQEeW4Casd4AfdsQ" key="Date" value="02/04/16 09:44"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_srEF5fjQEeW4Casd4AfdsQ" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_srBpovjQEeW4Casd4AfdsQ" name="Server">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_srBpo_jQEeW4Casd4AfdsQ" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_squHoPjQEeW4Casd4AfdsQ"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_srBppPjQEeW4Casd4AfdsQ" name="base_Classifier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Classifier"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+  </eAnnotations>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_sq2qgPjQEeW4Casd4AfdsQ">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Classifier"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_squHoPjQEeW4Casd4AfdsQ" name="Server">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_sq5GwPjQEeW4Casd4AfdsQ" name="base_Classifier" association="_sq34oPjQEeW4Casd4AfdsQ">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Classifier"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_sq34oPjQEeW4Casd4AfdsQ" name="Classifier_Server" memberEnd="_sq4fsPjQEeW4Casd4AfdsQ _sq5GwPjQEeW4Casd4AfdsQ">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_sq4fsPjQEeW4Casd4AfdsQ" name="extension_Server" type="_squHoPjQEeW4Casd4AfdsQ" aggregation="composite" association="_sq34oPjQEeW4Casd4AfdsQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_8YSzwPjQEeW4Casd4AfdsQ" name="Client">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_8YXFMPjQEeW4Casd4AfdsQ" name="base_Classifier" association="_8YVQAPjQEeW4Casd4AfdsQ">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Classifier"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_8YVQAPjQEeW4Casd4AfdsQ" name="Classifier_Client" memberEnd="_8YV3EPjQEeW4Casd4AfdsQ _8YXFMPjQEeW4Casd4AfdsQ">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_8YV3EPjQEeW4Casd4AfdsQ" name="extension_Client" type="_8YSzwPjQEeW4Casd4AfdsQ" aggregation="composite" association="_8YVQAPjQEeW4Casd4AfdsQ"/>
+  </packagedElement>
+</uml:Profile>

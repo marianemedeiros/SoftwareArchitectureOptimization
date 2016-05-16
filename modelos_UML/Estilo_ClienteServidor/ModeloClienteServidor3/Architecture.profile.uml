@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Profile xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_Jj4AkPK4EeWsI5RkEnd1zg" name="Architecture" metaclassReference="_Jj8SAPK4EeWsI5RkEnd1zg">
+  <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_JkBKgPK4EeWsI5RkEnd1zg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+    <contents xmi:type="ecore:EPackage" xmi:id="_JkBKgfK4EeWsI5RkEnd1zg" name="Architecture" nsURI="http:///schemas/Architecture/_Jj_8YPK4EeWsI5RkEnd1zg/0" nsPrefix="Architecture">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_JkCYofK4EeWsI5RkEnd1zg" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JkCYovK4EeWsI5RkEnd1zg" key="Version" value="0.0.1"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JkCYo_K4EeWsI5RkEnd1zg" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JkCYpPK4EeWsI5RkEnd1zg" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JkCYpfK4EeWsI5RkEnd1zg" key="Date" value="25/03/16 15:34"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_JkCYpvK4EeWsI5RkEnd1zg" key="Author" value=""/>
+      </eAnnotations>
+      <eClassifiers xmi:type="ecore:EClass" xmi:id="_JkBKgvK4EeWsI5RkEnd1zg" name="ClientServer">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_JkBKg_K4EeWsI5RkEnd1zg" source="http://www.eclipse.org/uml2/2.0.0/UML" references="_Jj51wPK4EeWsI5RkEnd1zg"/>
+        <eStructuralFeatures xmi:type="ecore:EReference" xmi:id="_JkBKhPK4EeWsI5RkEnd1zg" name="base_Classifier" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Classifier"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="_JkBKhvK4EeWsI5RkEnd1zg" name="type" ordered="false" lowerBound="1">
+          <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/uml2/5.0.0/Types#//String"/>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </contents>
+  </eAnnotations>
+  <elementImport xmi:type="uml:ElementImport" xmi:id="_Jj8SAPK4EeWsI5RkEnd1zg">
+    <importedElement xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Classifier"/>
+  </elementImport>
+  <packagedElement xmi:type="uml:Stereotype" xmi:id="_Jj51wPK4EeWsI5RkEnd1zg" name="ClientServer">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Jj-uQPK4EeWsI5RkEnd1zg" name="base_Classifier" association="_Jj9gIPK4EeWsI5RkEnd1zg">
+      <type xmi:type="uml:Class" href="pathmap://UML_METAMODELS/UML.metamodel.uml#Classifier"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Jj_VUPK4EeWsI5RkEnd1zg" name="type">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Extension" xmi:id="_Jj9gIPK4EeWsI5RkEnd1zg" name="Classifier_ClientServer" memberEnd="_Jj9gIfK4EeWsI5RkEnd1zg _Jj-uQPK4EeWsI5RkEnd1zg">
+    <ownedEnd xmi:type="uml:ExtensionEnd" xmi:id="_Jj9gIfK4EeWsI5RkEnd1zg" name="extension_ClientServer" type="_Jj51wPK4EeWsI5RkEnd1zg" aggregation="composite" association="_Jj9gIPK4EeWsI5RkEnd1zg"/>
+  </packagedElement>
+</uml:Profile>

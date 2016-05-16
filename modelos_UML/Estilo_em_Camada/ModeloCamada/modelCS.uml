@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ArchiteturalStyle="http:///schemas/ArchiteturalStyle/_0KzPcNvoEeWw0ZluXt9JwA/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/ArchiteturalStyle/_0KzPcNvoEeWw0ZluXt9JwA/0 ArchiteturalStyle.profile.uml#_0K4H8NvoEeWw0ZluXt9JwA">
+  <uml:Model xmi:id="_Pw5dQNsvEeWEA9oLN5oz-Q" name="RootElement" visibility="public">
+    <packagedElement xmi:type="uml:Component" xmi:id="_Qv1xwNsvEeWEA9oLN5oz-Q" name="component1">
+      <nestedClassifier xmi:type="uml:Interface" xmi:id="_SzM7MNswEeWEA9oLN5oz-Q" name="Interface2"/>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_ajjSENswEeWEA9oLN5oz-Q" name="Class1"/>
+      <packagedElement xmi:type="uml:Usage" xmi:id="_d1F7UNswEeWEA9oLN5oz-Q" client="_ajjSENswEeWEA9oLN5oz-Q" supplier="_SzM7MNswEeWEA9oLN5oz-Q"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_KpV9kOklEeW74o_VU6UywA" name="Class5"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Component" xmi:id="_JvLggNsxEeWEA9oLN5oz-Q" name="component2">
+      <packagedElement xmi:type="uml:Class" xmi:id="_P-5zENvqEeWw0ZluXt9JwA" name="Class2">
+        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_LoLuQOVdEeWYE4ooovkwow" client="_P-5zENvqEeWw0ZluXt9JwA" supplier="_SzM7MNswEeWEA9oLN5oz-Q" contract="_SzM7MNswEeWEA9oLN5oz-Q"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_Gs_OQOYbEeWKKd3S1iE8dg" name="Class3">
+        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_JFFuEOYbEeWKKd3S1iE8dg" client="_Gs_OQOYbEeWKKd3S1iE8dg" supplier="_SzM7MNswEeWEA9oLN5oz-Q" contract="_SzM7MNswEeWEA9oLN5oz-Q"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_L6QL0OklEeW74o_VU6UywA" client="_KpV9kOklEeW74o_VU6UywA" supplier="_ajjSENswEeWEA9oLN5oz-Q"/>
+    <packagedElement xmi:type="uml:Component" xmi:id="_Z5VykA-VEearXpFJM1y_0g" name="component3">
+      <packagedElement xmi:type="uml:Class" xmi:id="_KvvgwA-WEearXpFJM1y_0g" name="Class7">
+        <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_lOjh4A-WEearXpFJM1y_0g" client="_KvvgwA-WEearXpFJM1y_0g" supplier="_ijd0oA-WEearXpFJM1y_0g" contract="_ijd0oA-WEearXpFJM1y_0g"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_ijd0oA-WEearXpFJM1y_0g" name="Interface1"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Usage" xmi:id="_nFM6cA-WEearXpFJM1y_0g" client="_KpV9kOklEeW74o_VU6UywA" supplier="_ijd0oA-WEearXpFJM1y_0g"/>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_0K7yVtvoEeWw0ZluXt9JwA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0K-OkNvoEeWw0ZluXt9JwA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="ArchiteturalStyle.profile.uml#_0K4H8NvoEeWw0ZluXt9JwA"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="ArchiteturalStyle.profile.uml#_0KQc4NvoEeWw0ZluXt9JwA"/>
+    </profileApplication>
+  </uml:Model>
+  <ArchiteturalStyle:Layer xmi:id="_0LADwNvoEeWw0ZluXt9JwA" base_Classifier="_Qv1xwNsvEeWEA9oLN5oz-Q" id="camada1"/>
+  <ArchiteturalStyle:Layer xmi:id="_4jiKQNvoEeWw0ZluXt9JwA" base_Classifier="_JvLggNsxEeWEA9oLN5oz-Q" id="camada2"/>
+  <ArchiteturalStyle:Layer xmi:id="_ywLeYA-XEearXpFJM1y_0g" base_Classifier="_Z5VykA-VEearXpFJM1y_0g" id="camada3"/>
+</xmi:XMI>
