@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.SplittableRandom;
 import java.util.Set;
 
 import loadModel.LoadModel;
@@ -43,20 +44,20 @@ public class Ant {
 	private double sumPenalties;
 	private double sumPenalties2;
 	private Penalty possiblePenaltiesOfSolution;
+
+	private Random random;
 	
 	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
 		idDaFormiga = idDaFormiga + 1;
 		this.identidade = idDaFormiga;
 		probability = new Probability(p);
+		random = new SplittableRandom();
 	}
 
 	public Ant(Matrix pheromone, Solution s, Parametro p) {
-		this.pheromoneMatrix = pheromone;
-		idDaFormiga = idDaFormiga + 1;
-		this.identidade = idDaFormiga;
+		this(pheromone, p);
 		this.initialSolution = s;
-		probability = new Probability(p);
 	}
 
 	/**
@@ -375,7 +376,7 @@ public class Ant {
 	 * @param probs - vector of probabilities of choice.
 	 */
 	private synchronized int roulette(Double[] probs) {
-		double randomNum = new Random().nextDouble();
+		double randomNum = random.nextDouble();
 		double accumulation = 0;
 		int solutionSelected = 0;
 		for (int i = 0; i < probs.length; i++) {
@@ -396,7 +397,6 @@ public class Ant {
 	 */
 	private synchronized int rouletteIn(Double[] probs, double max) {
 		// sort a number between 0 and the sum of vector probabilities. 
-		Random random = new Random();
 		double range = max - 0.0;
 		double scaled = random.nextDouble() * range;
 		double shifted = scaled + 0.0; // (rand.nextDouble() * (max-min)) + min
