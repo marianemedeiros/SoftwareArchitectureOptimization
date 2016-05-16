@@ -45,7 +45,7 @@ public class Ant {
 	private double sumPenalties2;
 	private Penalty possiblePenaltiesOfSolution;
 
-	private Random random;
+	private SplittableRandom random;
 	
 	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
