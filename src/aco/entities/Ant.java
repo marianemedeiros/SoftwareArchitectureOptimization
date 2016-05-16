@@ -41,6 +41,8 @@ public class Ant {
 	private Probability probability;
 
 	private double sumPenalties;
+	private double sumPenalties2;
+	private Penalty possiblePenaltiesOfSolution;
 	
 	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
@@ -66,7 +68,7 @@ public class Ant {
 	 * @return solution built by ant.
 	 * */
 	public synchronized Solution buildSolution() {
-		sumPenalties = 0.0;
+		sumPenalties = 0.0; sumPenalties2 = 0.0;
 		Double probs[] = new Double[this.pheromoneMatrix.components];
 		HashMap<Integer, Set<Integer>> mapComponentClass = new HashMap<Integer, Set<Integer>>();
 		HashMap<Integer, Integer> mapClassComponent = new HashMap<Integer,Integer>();
@@ -94,8 +96,8 @@ public class Ant {
 		}
 
 		//verify before class combination which are combinations that break rules and how many times each class break the rule.
+		possiblePenaltiesOfSolution = new Penalty();
 		if(this.initialSolution != null && !this.initialSolution.type.equals("")){
-			Penalty penalty = new Penalty();
 			for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
 				for (int j = 0; j < this.pheromoneMatrix.classes; j++) {
 					if(this.initialSolution.type.equals(LoadModel.LAYER)){
@@ -114,8 +116,9 @@ public class Ant {
 						
 						if(l1 != null && l2 != null){
 							MetricLayerArch metricLayerArch = new MetricLayerArch();
-							penalty = metricLayerArch.verifyStyle(i, j, l1, l2, penalty);
+							possiblePenaltiesOfSolution = metricLayerArch.verifyStyle(i, j, l1, l2, possiblePenaltiesOfSolution);
 						}
+						// TODO fazer para quando uma classe se comunicar com uma outra classe que nao esta em nenhuma camada
 					}else if(this.initialSolution.type.equals(LoadModel.CLIENT_SERVER)){
 						String type_element0 = initialSolution.mapClassClient.get(i);
 						if(type_element0 == null) type_element0 = initialSolution.mapClassServer.get(i);
@@ -124,14 +127,13 @@ public class Ant {
 						if(type_element1 == null) type_element1 = initialSolution.mapClassServer.get(j);
 
 						MetricClientServerArch clientServerArch = new MetricClientServerArch();
-						penalty = clientServerArch.verifyStyle(i, j, type_element0, type_element1, penalty);
+						possiblePenaltiesOfSolution = clientServerArch.verifyStyle(i, j, type_element0, type_element1, possiblePenaltiesOfSolution);
 					}
 				}
 			}
 			
 			if(Main.SHOW_LOGS)
-				System.out.println("INFORMAÇÂO DE PENALIDADE ---- " + penalty.classBreak.size() + " classes que quebraram a regra, " + penalty.listBadRel.size() + " mÃ¡s relaÃ§Ãµes.");
-		this.initialSolution.penaltysOfSolution = penalty;
+				System.out.println("INFORMAÇÂO DE PENALIDADE ---- " + possiblePenaltiesOfSolution.classBreak.size() + " classes que quebraram a regra, " + possiblePenaltiesOfSolution.listBadRel.size() + " mÃ¡s relaÃ§Ãµes.");
 		}
 
 		// build matrix of Interfaces (Class x Class)
@@ -195,19 +197,33 @@ public class Ant {
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
 					interfaces.add(mapVetProbToMatrix.get(solutionSelectedInterfaces));
 					
-					if (this.initialSolution != null && this.initialSolution.penaltysOfSolution.classBreak.get(elements[0]) == null
-							&& this.initialSolution.penaltysOfSolution.classBreak.get(elements[1]) != null){//doesn't have i, but has j
+					if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) == null
+							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//doesn't have i, but has j
 						penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
-					}else if (this.initialSolution != null && this.initialSolution.penaltysOfSolution.classBreak.get(elements[0]) != null
-							&& this.initialSolution.penaltysOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
+						sumPenalties = 	sumPenalties +
+								Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+						sumPenalties2 = sumPenalties2 + 
+								(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+
+					}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
+							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 						penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
-					}else if (this.initialSolution != null && this.initialSolution.penaltysOfSolution.classBreak.get(elements[0]) != null
-							&& this.initialSolution.penaltysOfSolution.classBreak.get(elements[1]) != null){//has i and j
+						sumPenalties = 	sumPenalties +
+								Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+						sumPenalties2 = sumPenalties2 + 
+								(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+
+					}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
+							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
 						penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 						penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
+						sumPenalties =  sumPenalties +
+									Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+						sumPenalties2 =  sumPenalties2 +
+								(1 - Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
 					}
 
 					if(Main.SHOW_LOGS)
@@ -225,22 +241,35 @@ public class Ant {
 					internalRelation.add(mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation));
 					
 					if (this.initialSolution.type.equals(LoadModel.CLIENT_SERVER)){
-						if (this.initialSolution != null && this.initialSolution.penaltysOfSolution.classBreak.get(elements[0]) == null
-								&& this.initialSolution.penaltysOfSolution.classBreak.get(elements[1]) != null){//doesn't have i, but has j
+						if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) == null
+								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//doesn't have i, but has j
 							penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
-						}else if (this.initialSolution != null && this.initialSolution.penaltysOfSolution.classBreak.get(elements[0]) != null
-								&& this.initialSolution.penaltysOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
+							sumPenalties = 	sumPenalties +
+									Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+							sumPenalties2 = sumPenalties2 + 
+									(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+
+						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
+								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
-						}else if (this.initialSolution != null && this.initialSolution.penaltysOfSolution.classBreak.get(elements[0]) != null
-								&& this.initialSolution.penaltysOfSolution.classBreak.get(elements[1]) != null){//has i and j
+							sumPenalties = 	sumPenalties +
+									Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+							sumPenalties2 = sumPenalties2 + 
+									(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+
+						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
+								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 							penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
+							sumPenalties =  sumPenalties +
+									Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+							sumPenalties2 =  sumPenalties2 +
+								(1 - Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
 						}						
 					}
-
 					if(Main.SHOW_LOGS)
 						System.out.println("---Internal Relation " + mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation)[0]
 							+ "-" + mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation)[1]);
@@ -274,6 +303,7 @@ public class Ant {
 		ModulatizationQuality  modulatizationQuality = new ModulatizationQuality();
 		this.solution = modulatizationQuality.calculate(solution);
 		this.solution.totalOfPenalties = sumPenalties;
+		this.solution.totalOfPenalties2 =  sumPenalties2;
 		return  solution;
 		
 	}
@@ -293,34 +323,29 @@ public class Ant {
 	 */
 	private double verifyStylerArchAndCalcHeuristic(int i, int j) {
 		double probIntR = 0.0;
-		if(j == (this.pheromoneMatrix.classClass[0].length - 1) || (this.initialSolution.penaltysOfSolution.classBreak.size() == 0 && this.initialSolution.penaltysOfSolution.listBadRel.size() == 0)){
+		if(j == (this.pheromoneMatrix.classClass[0].length - 1) || (possiblePenaltiesOfSolution.classBreak.size() == 0 && possiblePenaltiesOfSolution.listBadRel.size() == 0)){
 			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
 			if(Main.SHOW_LOGS)
 				System.out.println("NÃ£o combinar classe " + i + " com ninguÃ©m. Ou, a arquitetura nÃ£o quebra nenhuma regra do estilo.");
 			
 		}else if(j != (this.pheromoneMatrix.classClass[0].length - 1)){
 			if(Main.SHOW_LOGS)
-				System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + this.initialSolution.penaltysOfSolution.classBreak.get(i) +
-					">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + this.initialSolution.penaltysOfSolution.classBreak.get(j) + ">>");
-
+				System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + possiblePenaltiesOfSolution.classBreak.get(i) +
+					">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + possiblePenaltiesOfSolution.classBreak.get(j) + ">>");
 			Double h = 0.0;
-			if(this.initialSolution.penaltysOfSolution.classBreak.get(i) == null &&  this.initialSolution.penaltysOfSolution.classBreak.get(j) == null)
+			if(possiblePenaltiesOfSolution.classBreak.get(i) == null &&  possiblePenaltiesOfSolution.classBreak.get(j) == null)
 				h = Probability.DEFAULT_VALUE_HEURISTIC;
-			else if (this.initialSolution.penaltysOfSolution.classBreak.get(i) == null){
-				h =  Double.valueOf(this.initialSolution.penaltysOfSolution.classBreak.get(j)) / Double.valueOf(this.initialSolution.penaltysOfSolution.listBadRel.size());
-				sumPenalties = sumPenalties + h;
+			else if (possiblePenaltiesOfSolution.classBreak.get(i) == null){
+				h =  Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(j)) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
 			}
-			else if (this.initialSolution.penaltysOfSolution.classBreak.get(j) == null){
-				h =  Double.valueOf(this.initialSolution.penaltysOfSolution.classBreak.get(i)) / Double.valueOf(this.initialSolution.penaltysOfSolution.listBadRel.size());
-				sumPenalties = sumPenalties + h;
+			else if (possiblePenaltiesOfSolution.classBreak.get(j) == null){
+				h =  Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(i)) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
 			}else {
-				h =  Double.valueOf((this.initialSolution.penaltysOfSolution.classBreak.get(i) + this.initialSolution.penaltysOfSolution.classBreak.get(j))) / Double.valueOf(this.initialSolution.penaltysOfSolution.listBadRel.size());
-				sumPenalties = sumPenalties + h;
+				h =  Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(i) + possiblePenaltiesOfSolution.classBreak.get(j))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
 			}
 			
 			if(Main.SHOW_LOGS)
-				System.out.println("Valor da penalidade para combinaÃ§Ã£o " + i +"-"+ j  +" = "+ h);
-
+				System.out.println("Valor da penalidade para combinaÃ§Ã£o " + i +"-"+ j  +" = "+ h + "(1-h=" + (1-h) + ")");
 			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, (1 - h));
 		}
 		return probIntR;
