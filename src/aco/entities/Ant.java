@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.SplittableRandom;
 import java.util.Set;
+import java.util.SplittableRandom;
 
 import loadModel.LoadModel;
 import loadModel.Solution;
@@ -45,7 +44,7 @@ public class Ant {
 	private double sumPenalties2;
 	private Penalty possiblePenaltiesOfSolution;
 
-	private Random random;
+	private SplittableRandom random;
 	
 	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
