@@ -28,7 +28,7 @@ public class MetricCoesion {
 		double coesion = 0.0;
 		for (Entry<Integer, Set<Integer>> component : soluction.componentClasses.entrySet()) {
 			internalRelation = 0.0;
-			for (Integer[] element : soluction.internalRelations) {
+			for (int[] element : soluction.internalRelations) {
 				if(component.getValue().contains(element[0]) && component.getValue().contains(element[1])){
 					internalRelation++;
 				}				

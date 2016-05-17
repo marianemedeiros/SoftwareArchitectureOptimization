@@ -14,7 +14,7 @@ import loadModel.Solution;
  *
  */
 public class Probability {
-	public static final Double DEFAULT_VALUE_HEURISTIC = 1.0;
+	public static final double DEFAULT_VALUE_HEURISTIC = 1.0;
 
 	private Matrix matrix;
 	private Parametro parametros;

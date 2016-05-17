@@ -30,9 +30,9 @@ public class MetricCoupling {
 				classesCp2 = soluction.componentClasses.get(cp2).size();
 				
 //				System.out.println("--- components " + cp1 + cp2);
-				for (Integer clCp1 : soluction.componentClasses.get(cp1)) {// to roam classes of clcp1
-					for (Integer clCp2 : soluction.componentClasses.get(cp2)) {// to roam classes of clcp2
-						for (Integer[] interfaces : soluction.interfaces) {// to roam interfaces
+				for (int clCp1 : soluction.componentClasses.get(cp1)) {// to roam classes of clcp1
+					for (int clCp2 : soluction.componentClasses.get(cp2)) {// to roam classes of clcp2
+						for (int[] interfaces : soluction.interfaces) {// to roam interfaces
 //							System.out.println(clCp1 + ", " + clCp2 + "int " + interfaces[0] + " " + interfaces[1]);
 							if((interfaces[0] == clCp1 && interfaces[1] == clCp2) 
 									|| interfaces[0] == clCp2 && interfaces[1] == clCp1){// verify if has connection between clCp1 and clCp2 of components c1 and c2

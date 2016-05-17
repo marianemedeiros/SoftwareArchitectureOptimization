@@ -69,7 +69,7 @@ public class Ant {
 	 * */
 	public synchronized Solution buildSolution() {
 		sumPenalties = 0.0; sumPenalties2 = 0.0;
-		Double probs[] = new Double[this.pheromoneMatrix.components];
+		double[] probs = new double[this.pheromoneMatrix.components];
 		HashMap<Integer, Set<Integer>> mapComponentClass = new HashMap<Integer, Set<Integer>>();
 		HashMap<Integer, Integer> mapClassComponent = new HashMap<Integer,Integer>();
 		Penalty penaltiesOfCurrentSolution = new Penalty();
@@ -101,8 +101,8 @@ public class Ant {
 			for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
 				for (int j = 0; j < this.pheromoneMatrix.classes; j++) {
 					if(this.initialSolution.type.equals(LoadModel.LAYER)){
-						Integer comp1 = mapClassComponent.get(i);
-						Integer comp2 = mapClassComponent.get(j);
+						int comp1 = mapClassComponent.get(i);
+						int comp2 = mapClassComponent.get(j);
 						
 						if(this.initialSolution.mapNewId2OldId != null){
 							int aux = this.initialSolution.mapNewId2OldId.get(comp1);
@@ -137,14 +137,14 @@ public class Ant {
 		}
 
 		// build matrix of Interfaces (Class x Class)
-		Double probsClass[] = new Double[this.pheromoneMatrix.classes];
-		HashMap<Integer, Integer[]> mapVetProbToMatrix = new HashMap<Integer, Integer[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
+		double[] probsClass = new double[this.pheromoneMatrix.classes];
+		HashMap<Integer, int[]> mapVetProbToMatrix = new HashMap<Integer, int[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
 
 		// build matrix of relations between classes of same component (Class x Class)
-		Double probsClassIntR[] = new Double[this.pheromoneMatrix.classes];
-		HashMap<Integer, Integer[]> mapVetProbToMatrixIntR = new HashMap<Integer, Integer[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
-		ArrayList<Integer[]> internalRelation = new ArrayList<Integer[]>();
+		double probsClassIntR[] = new double[this.pheromoneMatrix.classes];
+		HashMap<Integer, int[]> mapVetProbToMatrixIntR = new HashMap<Integer, int[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
+		ArrayList<int[]> internalRelation = new ArrayList<int[]>();
 
 		for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
 			int x = 0; // interfaces
@@ -162,7 +162,7 @@ public class Ant {
 					
 					probsClass[x] = prob;
 					sumProbs += prob;
-					Integer indices[] = new Integer[2];
+					int[] indices = new int[2];
 					indices[0] = i; indices[1] = j;
 					mapVetProbToMatrix.put(x, indices);
 					x++;
@@ -184,7 +184,7 @@ public class Ant {
 
 					probsClassIntR[y] = probIntR;
 					sumProbsIntR += probIntR;
-					Integer indices[] = new Integer[2];
+					int[] indices = new int[2];
 					indices[0] = i; indices[1] = j;
 					mapVetProbToMatrixIntR.put(y, indices);
 					y++;
@@ -193,7 +193,7 @@ public class Ant {
 
 			if(sumProbs != 0){
 				int solutionSelectedInterfaces = rouletteIn(probsClass,sumProbs);
-				Integer elements[] = mapVetProbToMatrix.get(solutionSelectedInterfaces);
+				int elements[] = mapVetProbToMatrix.get(solutionSelectedInterfaces);
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
 					interfaces.add(mapVetProbToMatrix.get(solutionSelectedInterfaces));
 					
@@ -202,18 +202,18 @@ public class Ant {
 						penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
 						sumPenalties = 	sumPenalties +
-								Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+								(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
 						sumPenalties2 = sumPenalties2 + 
-								(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+								(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
 
 					}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 						penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
 						sumPenalties = 	sumPenalties +
-								Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+								(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
 						sumPenalties2 = sumPenalties2 + 
-								(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+								(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
 
 					}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
@@ -221,9 +221,9 @@ public class Ant {
 						penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
 						sumPenalties =  sumPenalties +
-									Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+									((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size());
 						sumPenalties2 =  sumPenalties2 +
-								(1 - Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+								(1 - ((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size()));
 					}
 
 					if(Main.SHOW_LOGS)
@@ -236,7 +236,7 @@ public class Ant {
 
 			if(sumProbsIntR != 0){
 				int solutionSelectedInternalRelation = rouletteIn(probsClassIntR,sumProbsIntR);
-				Integer elements[] = mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation);
+				int elements[] = mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation);
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
 					internalRelation.add(mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation));
 					
@@ -246,18 +246,18 @@ public class Ant {
 							penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
 							sumPenalties = 	sumPenalties +
-									Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+									(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 = sumPenalties2 + 
-									(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+									(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
 
 						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
 							sumPenalties = 	sumPenalties +
-									Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+									(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 = sumPenalties2 + 
-									(1 - Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+									(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
 
 						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
@@ -265,9 +265,9 @@ public class Ant {
 							penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
 							sumPenalties =  sumPenalties +
-									Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+									((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 =  sumPenalties2 +
-								(1 - Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size()));
+								(1 - ((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size()));
 						}						
 					}
 					if(Main.SHOW_LOGS)
@@ -332,16 +332,16 @@ public class Ant {
 			if(Main.SHOW_LOGS)
 				System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + possiblePenaltiesOfSolution.classBreak.get(i) +
 					">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + possiblePenaltiesOfSolution.classBreak.get(j) + ">>");
-			Double h = 0.0;
+			double h = 0.0;
 			if(possiblePenaltiesOfSolution.classBreak.get(i) == null &&  possiblePenaltiesOfSolution.classBreak.get(j) == null)
 				h = Probability.DEFAULT_VALUE_HEURISTIC;
 			else if (possiblePenaltiesOfSolution.classBreak.get(i) == null){
-				h =  Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(j)) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+				h =  possiblePenaltiesOfSolution.classBreak.get(j) / possiblePenaltiesOfSolution.listBadRel.size();
 			}
 			else if (possiblePenaltiesOfSolution.classBreak.get(j) == null){
-				h =  Double.valueOf(possiblePenaltiesOfSolution.classBreak.get(i)) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+				h =  (possiblePenaltiesOfSolution.classBreak.get(i)) / (possiblePenaltiesOfSolution.listBadRel.size());
 			}else {
-				h =  Double.valueOf((possiblePenaltiesOfSolution.classBreak.get(i) + possiblePenaltiesOfSolution.classBreak.get(j))) / Double.valueOf(possiblePenaltiesOfSolution.listBadRel.size());
+				h =  ((possiblePenaltiesOfSolution.classBreak.get(i) + possiblePenaltiesOfSolution.classBreak.get(j))) / (possiblePenaltiesOfSolution.listBadRel.size());
 			}
 			
 			if(Main.SHOW_LOGS)
@@ -374,12 +374,12 @@ public class Ant {
 	/**
 	 * @param probs - vector of probabilities of choice.
 	 */
-	private synchronized int roulette(Double[] probs) {
+	private synchronized int roulette(double[] probs) {
 		double randomNum = random.nextDouble();
 		double accumulation = 0;
 		int solutionSelected = 0;
 		for (int i = 0; i < probs.length; i++) {
-			if(probs[i] != null && probs[i] != -1.0){
+			if(probs[i] != 0 && probs[i] != -1.0){
 				accumulation = accumulation + probs[i];
 				if (accumulation > randomNum) {
 					solutionSelected = i;
@@ -394,7 +394,7 @@ public class Ant {
 	 * @param probs - vector of probabilities of choice.
 	 * @param max - sum of vector probabilities.
 	 */
-	private synchronized int rouletteIn(Double[] probs, double max) {
+	private synchronized int rouletteIn(double[] probs, double max) {
 		// sort a number between 0 and the sum of vector probabilities. 
 		double range = max - 0.0;
 		double scaled = random.nextDouble() * range;
@@ -403,7 +403,7 @@ public class Ant {
 		double accumulation = 0;
 		int solutionSelected = 0;
 		for (int i = 0; i < probs.length; i++) {
-			if(probs[i] != null){
+			if(probs[i] != 0){
 				accumulation = accumulation + probs[i];
 				if (accumulation > shifted) {
 					solutionSelected = i;

@@ -13,8 +13,8 @@ public class ArchitectureExample {
 	/* used in TestCoesion because has internalRelation*/
 	public Solution generateSoluction1() {
 		HashMap<Integer, Set<Integer>> components = new HashMap<Integer, Set<Integer>>();
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
-		ArrayList<Integer[]> internalRelation = new ArrayList<Integer[]>();
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
+		ArrayList<int[]> internalRelation = new ArrayList<int[]>();
 
 		Set<Integer> classesComp1 = new HashSet<Integer>();
 		classesComp1.add(0);
@@ -35,40 +35,40 @@ public class ArchitectureExample {
 		components.put(2, classesComp3);
 
 		// interface
-		Integer interface_[] = new Integer[2];
+		int interface_[] = new int[2];
 		interface_[0] = 1; interface_[1] = 4;
 		interfaces.add(interface_);
 
-		Integer interface_1[] = new Integer[2];
+		int interface_1[] = new int[2];
 		interface_1[0] = 2; interface_1[1] = 3;
 		interfaces.add(interface_1);
 
-		Integer interface_2[] = new Integer[2];
+		int interface_2[] = new int[2];
 		interface_2[0] = 0; interface_2[1] = 8;
 		interfaces.add(interface_2);
 
-		Integer interface_3[] = new Integer[2];
+		int interface_3[] = new int[2];
 		interface_3[0] = 4; interface_3[1] = 5;
 		interfaces.add(interface_3);
 
 		// class class
-		Integer class_[] = new Integer[2];
+		int class_[] = new int[2];
 		class_[0] = 0; class_[1] = 2;
 		internalRelation.add(class_);
 
-		Integer class_1[] = new Integer[2];
+		int class_1[] = new int[2];
 		class_1[0] = 1; class_1[1] = 2;
 		internalRelation.add(class_1);
 
-		Integer class_2[] = new Integer[2];
+		int class_2[] = new int[2];
 		class_2[0] = 3; class_2[1] = 4;
 		internalRelation.add(class_2);
 
-		Integer class_3[] = new Integer[2];
+		int class_3[] = new int[2];
 		class_3[0] = 5; class_3[1] = 8;
 		internalRelation.add(class_3);
 
-		Integer class_4[] = new Integer[2];
+		int class_4[] = new int[2];
 		class_4[0] = 6; class_4[1] = 7;
 		internalRelation.add(class_4);
 
@@ -79,7 +79,7 @@ public class ArchitectureExample {
 	/*used in Coupling test because doesn't have internal relation*/
 	public Solution generateSoluction2() {
 		HashMap<Integer, Set<Integer>> components = new HashMap<Integer, Set<Integer>>();
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
 
 		Set<Integer> classesComp1 = new HashSet<Integer>();
 		classesComp1.add(0);
@@ -99,19 +99,19 @@ public class ArchitectureExample {
 		classesComp3.add(8);
 		components.put(2, classesComp3);
 
-		Integer interface_[] = new Integer[2];
+		int interface_[] = new int[2];
 		interface_[0] = 1; interface_[1] = 4;
 		interfaces.add(interface_);
 
-		Integer interface_1[] = new Integer[2];
+		int interface_1[] = new int[2];
 		interface_1[0] = 2; interface_1[1] = 3;
 		interfaces.add(interface_1);
 
-		Integer interface_2[] = new Integer[2];
+		int interface_2[] = new int[2];
 		interface_2[0] = 0; interface_2[1] = 8;
 		interfaces.add(interface_2);
 
-		Integer interface_3[] = new Integer[2];
+		int interface_3[] = new int[2];
 		interface_3[0] = 4; interface_3[1] = 5;
 		interfaces.add(interface_3);
 
@@ -130,7 +130,7 @@ public class ArchitectureExample {
 	 * */
 	public Solution generateSoluction3() {
 		HashMap<Integer, Set<Integer>> components = new HashMap<Integer, Set<Integer>>();
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
 
 		Set<Integer> classesComp1 = new HashSet<Integer>();
 		classesComp1.add(0);
@@ -149,7 +149,7 @@ public class ArchitectureExample {
 		classesComp3.add(8);
 		components.put(2, classesComp3);
 
-		Integer interface_[] = new Integer[2];
+		int interface_[] = new int[2];
 		interface_[0] = 2; interface_[1] = 0;
 		interfaces.add(interface_);
 
@@ -168,7 +168,7 @@ public class ArchitectureExample {
 	 **/
 	public Solution generateSoluction4() {
 		HashMap<Integer, Set<Integer>> components = new HashMap<Integer, Set<Integer>>();
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
 
 		Set<Integer> classesComp1 = new HashSet<Integer>();
 		classesComp1.add(0);
@@ -207,8 +207,8 @@ public class ArchitectureExample {
 	 * */
 	public Solution generateSoluction5() {
 		HashMap<Integer, Set<Integer>> components = new HashMap<Integer, Set<Integer>>();
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
-		ArrayList<Integer[]> internalRelation = new ArrayList<Integer[]>();
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
+		ArrayList<int[]> internalRelation = new ArrayList<int[]>();
 
 		Set<Integer> classesComp1 = new HashSet<Integer>();
 		classesComp1.add(1);
@@ -221,28 +221,28 @@ public class ArchitectureExample {
 		components.put(1, classesComp2);
 
 		// interface
-		Integer interface_[] = new Integer[2];
+		int interface_[] = new int[2];
 		interface_[0] = 1; interface_[1] = 0;
 		interfaces.add(interface_);
 
-		Integer interface_1[] = new Integer[2];
+		int interface_1[] = new int[2];
 		interface_1[0] = 2; interface_1[1] = 0;
 		interfaces.add(interface_1);
 
-		Integer interface_2[] = new Integer[2];
+		int interface_2[] = new int[2];
 		interface_2[0] = 3; interface_2[1] = 0;
 		interfaces.add(interface_2);
 
 		// class class
-		Integer class_[] = new Integer[2];
+		int class_[] = new int[2];
 		class_[0] = 1; class_[1] = 3;
 		internalRelation.add(class_);
 
-		Integer class_1[] = new Integer[2];
+		int class_1[] = new int[2];
 		class_1[0] = 2; class_1[1] = 1;
 		internalRelation.add(class_1);
 
-		Integer class_2[] = new Integer[2];
+		int class_2[] = new int[2];
 		class_2[0] = 3; class_2[1] = 2;
 		internalRelation.add(class_2);
 
@@ -255,8 +255,8 @@ public class ArchitectureExample {
 		HashMap<Integer, Integer> classComponent = new HashMap<Integer,Integer>();
 		
 		HashMap<Integer, Set<Integer>> components = new HashMap<Integer, Set<Integer>>();
-		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
-		ArrayList<Integer[]> internalRelation = new ArrayList<Integer[]>();
+		ArrayList<int[]> interfaces = new ArrayList<int[]>();
+		ArrayList<int[]> internalRelation = new ArrayList<int[]>();
 
 		Set<Integer> classesComp1 = new HashSet<Integer>();
 		classesComp1.add(0);
@@ -289,40 +289,40 @@ public class ArchitectureExample {
 		classComponent.put(8, 2);
 		
 		// interface
-		Integer interface_[] = new Integer[2];
+		int interface_[] = new int[2];
 		interface_[0] = 1; interface_[1] = 4;
 		interfaces.add(interface_);
 
-		Integer interface_1[] = new Integer[2];
+		int interface_1[] = new int[2];
 		interface_1[0] = 2; interface_1[1] = 3;
 		interfaces.add(interface_1);
 
-		Integer interface_2[] = new Integer[2];
+		int interface_2[] = new int[2];
 		interface_2[0] = 0; interface_2[1] = 8;
 		interfaces.add(interface_2);
 
-		Integer interface_3[] = new Integer[2];
+		int interface_3[] = new int[2];
 		interface_3[0] = 4; interface_3[1] = 5;
 		interfaces.add(interface_3);
 
 		// class class
-		Integer class_[] = new Integer[2];
+		int class_[] = new int[2];
 		class_[0] = 0; class_[1] = 2;
 		internalRelation.add(class_);
 
-		Integer class_1[] = new Integer[2];
+		int class_1[] = new int[2];
 		class_1[0] = 1; class_1[1] = 2;
 		internalRelation.add(class_1);
 
-		Integer class_2[] = new Integer[2];
+		int class_2[] = new int[2];
 		class_2[0] = 3; class_2[1] = 4;
 		internalRelation.add(class_2);
 
-		Integer class_3[] = new Integer[2];
+		int class_3[] = new int[2];
 		class_3[0] = 5; class_3[1] = 8;
 		internalRelation.add(class_3);
 
-		Integer class_4[] = new Integer[2];
+		int class_4[] = new int[2];
 		class_4[0] = 6; class_4[1] = 7;
 		internalRelation.add(class_4);
 

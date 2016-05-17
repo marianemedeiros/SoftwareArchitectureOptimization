@@ -13,8 +13,8 @@ public class Matrix {
 	 int components;
 	 int classes;
 	
-	 public Double componentClass[][];
-	 public Double classClass[][];
+	 public double componentClass[][];
+	 public double classClass[][];
 
 	/**
 	 * Constructor
@@ -23,8 +23,8 @@ public class Matrix {
 		this.components = comp;
 		this.classes = cl;
 		
-		this.componentClass = new Double[cl][comp];
-		this.classClass= new Double[cl][++cl];
+		this.componentClass = new double[cl][comp];
+		this.classClass= new double[cl][++cl];
 
 		init(0.5);
 	}
@@ -33,8 +33,8 @@ public class Matrix {
 		this.components = comp;
 		this.classes = cl;
 		
-		this.componentClass = new Double[cl][comp];
-		this.classClass= new Double[cl][cl];
+		this.componentClass = new double[cl][comp];
+		this.classClass= new double[cl][cl];
 		
 		init(value);
 	}
@@ -45,14 +45,14 @@ public class Matrix {
 	private void init(double value) {
 		for (int i = 0; i < this.classes; i++) {
 			for (int j = 0; j < this.components; j++) {
-				if(this.componentClass[i][j] == null)
+				if(this.componentClass[i][j] == 0)
 					this.componentClass[i][j] = value;
 			}
 		}
 		
 		for (int i = 0; i < this.classes; i++) {
 			for (int j = 0; j < classClass[0].length; j++) {
-				if(this.classClass[i][j] == null)
+				if(this.classClass[i][j] == 0)
 					this.classClass[i][j] = value;
 			}
 		}

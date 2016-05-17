@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class Penalty {
 	
-	public ArrayList<Integer[]> listBadRel = new ArrayList<Integer[]>(); // relações que quebram a regra
+	public ArrayList<int[]> listBadRel = new ArrayList<int[]>(); // relações que quebram a regra
 	public HashMap<Integer,Integer> classBreak = new HashMap<Integer, Integer>(); // quantidade de vezes que uma classe quebra a regra.
 	public double heuristicInformation = 0.0;
 	
@@ -24,7 +24,7 @@ public class Penalty {
 		}
 	}
 	
-	public void addToListBasRel(Integer[] i){
+	public void addToListBasRel(int[] i){
 		listBadRel.add(i);
 	}
 	
