@@ -47,12 +47,10 @@ public class Main {
 							for (int i = 0; i < trials; i++) {
 								Parametro param = new Parametro(iteration, ant, ro, alpha, beta);
 								Architecture architecture = new Architecture(abspath+path,"modelCS",param);// arquitetura do apache-ant sem estilo
-								architecture.initAntSystem();
+								architecture.initAntSystem(i);
 
-								//architecture = new Architecture(abspath+apacheAnt,ant11,param);//arquitetura do apache-ant sem estilo
-								//architecture.initAntSystem();
-								
-								
+								architecture = new Architecture(abspath+apacheAnt,ant11,param);//arquitetura do apache-ant sem estilo
+								architecture.initAntSystem(i);
 							}
 						}
 					}

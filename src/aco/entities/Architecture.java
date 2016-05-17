@@ -45,7 +45,7 @@ public class Architecture {
 
 	}
 
-	public void initAntSystem() throws Exception{
+	public void initAntSystem(int trial) throws Exception{
 		if(this.initialSolution.interfaces != null && this.initialSolution.internalRelations != null){// arquitetura ja estruturada
 			MetricCoupling coupling = new MetricCoupling();
 			this.initialSolution = coupling.calculate(initialSolution);
@@ -79,28 +79,26 @@ public class Architecture {
 		
 		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.");
 		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"+parametros.BETA
-				+ "_" + stopTime);
-		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados");
+				+ "_" + trial);
+		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados", trial);
 	}
 
 	private void saveExtractArch(Solution s, String nameFile) throws IOException {
-		try{
 			File file = new File(Main.results, nameFile);
 			FileWriter fileWriter = new FileWriter(file);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId, this.initialSolution.mapOldId2NewId);
 			bufferedWriter.close();
-		}catch(IOException ex){
-			ex.printStackTrace();
-		}
 	}
 
-	private void saveValues(Solution s, double d, String nameFile) throws IOException {
+	private void saveValues(Solution s, double d, String nameFile, int trial) throws IOException {
 		try{
 			File file = new File(Main.results, nameFile);
 			FileWriter fileWriter = new FileWriter(file,true);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
+			bufferedWriter.write("Trial: " + trial);
+			bufferedWriter.newLine();
 			bufferedWriter.write("Iterations: " + parametros.ITERATIONS);
 			bufferedWriter.newLine();	            
 			bufferedWriter.write("Ants:" + parametros.ANTS);
