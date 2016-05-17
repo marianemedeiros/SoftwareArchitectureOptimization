@@ -283,7 +283,6 @@ public class LoadModel {
 		}else if(architectureStyle.equals("") && interfaces_.size() == 0 && internalRelations.size() == 0){
 			solution = new Solution(mapComponentName2Id.size(),mapClassName2Id.size());
 		}else if(architectureStyle.equals("") && (interfaces_.size() != 0 || internalRelations.size() != 0)){
-			System.out.println("Initial Architecture without style.");
 			solution = new Solution(componentClasses, interfaces_, internalRelations, classComponent);
 		}
 		

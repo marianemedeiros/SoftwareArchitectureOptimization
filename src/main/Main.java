@@ -8,7 +8,7 @@ import aco.entities.Parametro;
 public class Main {
 	public static boolean SHOW_LOGS = false; 
 
-	public static String results = "/home/mariane/Dropbox/TCC-Mariane/resultados/";
+	public static String results = "/home/mariane/Documentos/utf-bcc/resultados/";
 
 	public static String path = "/modelos_UML/Estilo_em_Camada/ModeloCamada";
 	public static String pathSS = "/modelos_UML/Estilo_em_Camada/ModeloCamadaSemStyle";
@@ -32,11 +32,11 @@ public class Main {
 		File file = new java.io.File("");   //Dummy file
 		String  abspath = file.getAbsolutePath();
 
-		double[] alphas = {0.1, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
-		double[] betas = {0.0, 0.1, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4};
-		double[] evaporationRates = {0.1, 0.2, 0.4, 0.6, 0.8,1.0, 1.2, 1.4};
-		int[] iterations = {10, 20, 40, 80, 160, 320, 640, 1280};
-		int[] ants = {5, 10, 20, 40, 80, 160, 320, 640, 1280};
+		double[] alphas = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
+		double[] betas = {0.0, 0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
+		double[] evaporationRates = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+		int[] iterations = {10, 20, 40, 80, 160, 320, 400};
+		int[] ants = {5, 10, 20, 40, 80, 160, 320};
 		int trials = 10;
 
 		for (int ant : ants) {
@@ -46,7 +46,7 @@ public class Main {
 						for (double ro :evaporationRates) {
 							for (int i = 0; i < trials; i++) {
 								Parametro param = new Parametro(iteration, ant, ro, alpha, beta);
-								Architecture architecture = new Architecture(abspath+path,"modelCS",param);// arquitetura do apache-ant sem estilo
+								Architecture architecture = new Architecture(abspath+apacheAntStyle,ant11Style,param);// arquitetura do apache-ant sem estilo
 								architecture.initAntSystem(i);
 
 								architecture = new Architecture(abspath+apacheAnt,ant11,param);//arquitetura do apache-ant sem estilo

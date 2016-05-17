@@ -104,7 +104,7 @@ public class Colony {
 
 		}
 
-		//if(Main.SHOW_LOGS)
+		if(Main.SHOW_LOGS)
 			System.out.println("Best solution value found: " + valueOfBestValueFound);
 
 		Matrix aux = new Matrix(this.pheromoneMatrix.components, this.pheromoneMatrix.classes, 0);

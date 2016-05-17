@@ -39,7 +39,8 @@ public class Architecture {
 		long startTime = System.currentTimeMillis();
 		initialSolution = loadModel.buildSoluction();
 		long stopTime = System.currentTimeMillis();
-		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to extract architecture");
+		if(Main.SHOW_LOGS)
+			System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to extract architecture");
 		this.parametros = p;
 		saveExtractArch(initialSolution,nameFile + "_"+"modeloExtraido");
 
@@ -56,28 +57,30 @@ public class Architecture {
 			ModulatizationQuality  modulatizationQuality = new ModulatizationQuality();
 			this.initialSolution = modulatizationQuality.calculate(initialSolution);
 
-			if(this.initialSolution.type.equals(""))
-				System.out.println("\n Initial Architecture Defined without any style architectural!!!");
-			else
-				System.out.println("\n Initial Architecture Defined!!! \n So architecture style that will be evaluated is <<" + this.initialSolution.type + ">>");
-
-			System.out.println(" Modularization Qualidaty of that architecture: " + this.initialSolution.mMetric);
-			System.out.println("Iterations: " + parametros.ITERATIONS + " Ants: " + parametros.ANTS + " Ro: " + parametros.RO + " Alpha: " + parametros.ALPA + " Beta: " + parametros.BETA);
-			System.out.println(" Number of components: " + initialSolution.componentClasses.size() + "\n Number of classes: " + initialSolution.classComponent.size());
-
+			//if(this.initialSolution.type.equals(""))
+			//	System.out.println("\n Initial Architecture Defined without any style architectural!!!");
+			//else
+			//	System.out.println("\n Initial Architecture Defined!!! \n So architecture style that will be evaluated is <<" + this.initialSolution.type + ">>");
+			
+			if(Main.SHOW_LOGS){
+				System.out.println(" Modularization Qualidaty of that architecture: " + this.initialSolution.mMetric);
+				System.out.println("Iterations: " + parametros.ITERATIONS + " Ants: " + parametros.ANTS + " Ro: " + parametros.RO + " Alpha: " + parametros.ALPA + " Beta: " + parametros.BETA);
+				System.out.println(" Number of components: " + initialSolution.componentClasses.size() + "\n Number of classes: " + initialSolution.classComponent.size());
+			}
+			
 			Matrix m = new Matrix(initialSolution.componentClasses.size(), initialSolution.classComponent.size());
 			antSystem = new AntSystem(m,initialSolution,parametros);
 		}else{// to architectures with loose components and classes.
-			System.out.println("\n No established architecture!!!");
+			//System.out.println("\n No established architecture!!!");
 			antSystem = new AntSystem(this.initialSolution.number_comp, this.initialSolution.number_class,parametros);
 		}
 
 		long startTime = System.currentTimeMillis();
 		Solution generatedSolution = antSystem.execute();
 		long stopTime = System.currentTimeMillis();
-		generatedSolution.showSolution();
+		//generatedSolution.showSolution();
 		
-		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.");
+		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.\n");
 		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"+parametros.BETA
 				+ "_" + trial);
 		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados", trial);
