@@ -32,13 +32,16 @@ public class Architecture {
 	private Solution initialSolution;
 	private Parametro parametros;
 	
-	public Architecture(String pathUmlFile, String nameFile, Parametro p) throws Exception {
+	private String diretorioResults;
+	
+	public Architecture(String pathUmlFile, String nameFile, Parametro p, String s) throws Exception {
 		this.nameFile = nameFile;
 		loadModel = new LoadModel(URI.createFileURI(pathUmlFile).appendSegment(nameFile).appendFileExtension(UMLResource.FILE_EXTENSION));
 
 		long startTime = System.currentTimeMillis();
 		initialSolution = loadModel.buildSoluction();
 		long stopTime = System.currentTimeMillis();
+		this.diretorioResults = s;
 		if(Main.SHOW_LOGS)
 			System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to extract architecture");
 		this.parametros = p;
@@ -81,13 +84,13 @@ public class Architecture {
 		//generatedSolution.showSolution();
 		
 		System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to generate new solution.\n");
-		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"+parametros.BETA
-				+ "_" + trial);
+		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"
+		+parametros.BETA + "_" + trial);
 		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados", trial);
 	}
 
 	private void saveExtractArch(Solution s, String nameFile) throws IOException {
-			File file = new File(Main.results, nameFile);
+			File file = new File(this.diretorioResults,nameFile);
 			FileWriter fileWriter = new FileWriter(file);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 			loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId, this.initialSolution.mapOldId2NewId);
@@ -96,7 +99,7 @@ public class Architecture {
 
 	private void saveValues(Solution s, double d, String nameFile, int trial) throws IOException {
 		try{
-			File file = new File(Main.results, nameFile);
+			File file = new File(this.diretorioResults,nameFile);
 			FileWriter fileWriter = new FileWriter(file,true);
 			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
@@ -131,12 +134,23 @@ public class Architecture {
 				bufferedWriter.newLine();
 				bufferedWriter.write("Total of penalties (1 - h): " + s.totalOfPenalties2);
 				bufferedWriter.newLine();
+				
+				for (int i = 0; i < antSystem.penalties.length; i++) {
+					bufferedWriter.write("-- Iteration " + i + " Total of penalties (h): " + antSystem.penalties[i]);
+					bufferedWriter.newLine();
+				}
+				
+				for (int i = 0; i < antSystem.penalties2.length; i++) {
+					bufferedWriter.write("-- Iteration " + i + " Total of penalties (1 - h): " + antSystem.penalties2[i]);
+					bufferedWriter.newLine();
+				}
 			}
 			
-			for (int i = 0; i < antSystem.evolutionMq.size(); i++) {
-				bufferedWriter.write("-- Iteration " + (i*(parametros.ITERATIONS/10)) + " MQ value: " + antSystem.evolutionMq.get(i));
+			for (int i = 0; i < antSystem.evolutionMq.length; i++) {
+				bufferedWriter.write("-- Iteration " + i + " MQ value: " + antSystem.evolutionMq[i]);
 				bufferedWriter.newLine();
 			}
+
 			
 			bufferedWriter.write("Time Execution: " + formatter.format(d));
 			bufferedWriter.newLine();

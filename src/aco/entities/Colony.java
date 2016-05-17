@@ -144,8 +144,8 @@ public class Colony {
 	 */
 	private void uptadePheromone(Matrix aux) {
 		HashMap<Integer, Set<Integer>> mapCompClass = this.bestAnt.getSolution().componentClasses;
-		ArrayList<Integer[]> interfaces = this.bestAnt.getSolution().interfaces;
-		ArrayList<Integer[]> internalRelations = this.bestAnt.getSolution().internalRelations;
+		ArrayList<int[]> interfaces = this.bestAnt.getSolution().interfaces;
+		ArrayList<int[]> internalRelations = this.bestAnt.getSolution().internalRelations;
 
 		// atualizando na metriz de feromonio a solução escolhida.
 		for (Entry<Integer, Set<Integer>> element : mapCompClass.entrySet()) {
@@ -159,14 +159,14 @@ public class Colony {
 			}
 		}
 
-		for (Integer[] integers : interfaces) {
+		for (int[] integers : interfaces) {
 			this.getPheromoneMatrix().classClass[integers[0]][integers[1]] = 
 					(1 -  parametros.RO) * this.getPheromoneMatrix().classClass[integers[0]][integers[1]]
 							+  this.bestAnt.getSolution().mMetric;
 			aux.classClass[integers[0]][integers[1]] = 1.0;
 		}
 
-		for (Integer[] integers : internalRelations) {
+		for (int[] integers : internalRelations) {
 			this.getPheromoneMatrix().classClass[integers[0]][integers[1]] = 
 					(1 -  parametros.RO) * this.getPheromoneMatrix().classClass[integers[0]][integers[1]]
 							+  this.bestAnt.getSolution().mMetric;
