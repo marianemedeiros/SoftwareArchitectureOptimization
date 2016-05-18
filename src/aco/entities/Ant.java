@@ -202,28 +202,28 @@ public class Ant {
 						penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
 						sumPenalties = 	sumPenalties +
-								(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
+								 ((double) possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
 						sumPenalties2 = sumPenalties2 + 
-								(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
-
+								 (1 - ((double) possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
 					}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 						penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
 						sumPenalties = 	sumPenalties +
-								(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
+								 ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
 						sumPenalties2 = sumPenalties2 + 
-								(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
-
+								 (1 - ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
 					}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 							&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
 						penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 						penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 						penaltiesOfCurrentSolution.addToListBasRel(elements);
-						sumPenalties =  sumPenalties +
-									((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size());
-						sumPenalties2 =  sumPenalties2 +
-								(1 - ((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size()));
+						
+						double sumC = ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) + 
+								possiblePenaltiesOfSolution.classBreak.get(elements[1]);
+								
+						sumPenalties =  sumPenalties + ( sumC / (possiblePenaltiesOfSolution.listBadRel.size()));
+						sumPenalties2 =  sumPenalties2 + (1 -  (sumC / (possiblePenaltiesOfSolution.listBadRel.size())));
 					}
 
 					if(Main.SHOW_LOGS)
@@ -246,29 +246,31 @@ public class Ant {
 							penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
 							sumPenalties = 	sumPenalties +
-									(possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
+									 ((double) possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 = sumPenalties2 + 
-									(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
-
+									 (1 - ((double) possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
+							System.err.println("sumP: " + sumPenalties);
 						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
 							sumPenalties = 	sumPenalties +
-									(possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
+									 ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 = sumPenalties2 + 
-									(1 - (possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
-
+									 (1 - ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
+							System.err.println("sumP: " + sumPenalties);
 						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
 							penaltiesOfCurrentSolution.addToClassBreak(elements[1]);
 							penaltiesOfCurrentSolution.addToListBasRel(elements);
-							sumPenalties =  sumPenalties +
-									((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size());
-							sumPenalties2 =  sumPenalties2 +
-								(1 - ((possiblePenaltiesOfSolution.classBreak.get(elements[0]) + possiblePenaltiesOfSolution.classBreak.get(elements[1]))) / (possiblePenaltiesOfSolution.listBadRel.size()));
-						}						
+							
+							double sumC = ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) + 
+									possiblePenaltiesOfSolution.classBreak.get(elements[1]);
+									
+							sumPenalties =  sumPenalties + ( sumC / (possiblePenaltiesOfSolution.listBadRel.size()));
+							sumPenalties2 =  sumPenalties2 + (1 -  (sumC / (possiblePenaltiesOfSolution.listBadRel.size())));
+						}
 					}
 					if(Main.SHOW_LOGS)
 						System.out.println("---Internal Relation " + mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation)[0]
