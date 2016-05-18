@@ -100,8 +100,8 @@ public class LoadModel {
 	public HashMap<Integer,Integer> classComponent;
 	public HashMap<Integer, Set<Integer>> componentClasses ; // component - classes in component
 	public HashMap<Integer,Integer> componentLayer; // componentId - layerId
-	public ArrayList<int[]> interfaces_;
-	public ArrayList<int[]> internalRelations;
+	public ArrayList<Integer[]> interfaces_;
+	public ArrayList<Integer[]> internalRelations;
 
 	public String base = "";
 	public LoadModel(URI uri) {
@@ -128,8 +128,8 @@ public class LoadModel {
 
 		classComponent = new HashMap<Integer, Integer>();
 		componentClasses = new HashMap<Integer, Set<Integer>>();
-		interfaces_ = new ArrayList<int[]>();
-		internalRelations = new ArrayList<int[]>();
+		interfaces_ = new ArrayList<Integer[]>();
+		internalRelations = new ArrayList<Integer[]>();
 
 		load(uri);
 	}
@@ -336,7 +336,7 @@ public class LoadModel {
 		 * To unidirectional relationship is used Usage.
 		 * */
 		if((classComponent.get(cl1[0]) == classComponent.get(cl1[1])) && cl1[0] != null && cl1[1] != null){
-			int[] aux = new int[2];
+			Integer[] aux = new Integer[2];
 			aux[0] = cl1[1]; aux[1] = cl1[0];
 			internalRelations.add(aux);
 		}else if(inter[0] != null && inter[1] != null){
@@ -344,12 +344,12 @@ public class LoadModel {
 			int class1 = getWhoRealizeInterface(inter[1]); // class that realize inter[1]
 
 			if(class0 != -1 && class1 != -1 && classComponent.get(class0) != classComponent.get(class1)){
-				int[] rl1 = new int[2];
+				Integer[] rl1 = new Integer[2];
 				rl1[0] = class1; rl1[1] = class0;
 				interfaces_.add(rl1); 
 			}
 		}else if((classComponent.get(cl1[0]) != classComponent.get(cl1[1])) && cl1[0] != null && cl1[1] != null){
-			int[] aux = new int[2];
+			Integer[] aux = new Integer[2];
 			aux[0] = cl1[1]; aux[1] = cl1[0];
 			interfaces_.add(aux);
 		}
@@ -385,7 +385,7 @@ public class LoadModel {
 					if(classComponent.get(idS) == classComponent.get(client)){
 						//System.out.println("<<"+ getMapId2ClassName().get(client) + ">> and <<" + getMapId2ClassName().get(idS) +" >> have a relation, but they "
 						//		+ "are in the " );
-						int[] r = new int[2];
+						Integer[] r = new Integer[2];
 						r[0] = client; r[1] = idS;
 						internalRelations.add(r);
 					}
@@ -395,7 +395,7 @@ public class LoadModel {
 		if(!relationships.isEmpty()){
 			for (Integer client : clients) {
 				for (Integer relation : relationships) {
-					int[] r = new int[2];
+					Integer[] r = new Integer[2];
 					r[0] = client; r[1] = relation;
 					interfaces_.add(r);
 					//System.out.println("Class <<" + getMapId2ClassName().get(client) + ">> and <<" + getMapId2ClassName().get(relation) + ">> have a relationship.");
@@ -586,7 +586,7 @@ public class LoadModel {
 			System.out.println(getMapId2ClassName().get(iterable_element.getKey()) + " -- " + mapId2ComponentName.get(iterable_element.getValue()));
 		}
 		System.out.println("Interfaces");
-		for (int[] iterable_element : interfaces_) {
+		for (Integer[] iterable_element : interfaces_) {
 			System.out.println(getMapId2ClassName().get(iterable_element[0]) + "--" + getMapId2ClassName().get(iterable_element[1]));
 		}
 	}
@@ -617,7 +617,7 @@ public class LoadModel {
 			}
 		}
 		
-		for (int[] interfaces : solution.interfaces) {
+		for (Integer[] interfaces : solution.interfaces) {
 			String class1 = getMapId2ClassName().get(interfaces[0]);
 			String class2 = getMapId2ClassName().get(interfaces[1]);
 			String cp1 = getComponetName(solution.classComponent.get(interfaces[0]), mapNewId2OldId);
@@ -632,7 +632,7 @@ public class LoadModel {
 	        file.newLine();
 		}
 		
-		for (int[] internalRelation : solution.internalRelations) {
+		for (Integer[] internalRelation : solution.internalRelations) {
 			String class1 = getMapId2ClassName().get(internalRelation[0]);
 			String class2 = getMapId2ClassName().get(internalRelation[1]);
 			String cp = getComponetName(solution.classComponent.get(internalRelation[0]), mapNewId2OldId);

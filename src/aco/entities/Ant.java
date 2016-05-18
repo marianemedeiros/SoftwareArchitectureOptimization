@@ -98,16 +98,16 @@ public class Ant {
 		//verify before class combination which are combinations that break rules and how many times each class break the rule.
 		possiblePenaltiesOfSolution = new Penalty();
 		if(this.initialSolution != null && !this.initialSolution.type.equals("")){
-			for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
-				for (int j = 0; j < this.pheromoneMatrix.classes; j++) {
+			for (Integer i = 0; i < this.pheromoneMatrix.classes; i++) {
+				for (Integer j = 0; j < this.pheromoneMatrix.classes; j++) {
 					if(this.initialSolution.type.equals(LoadModel.LAYER)){
-						int comp1 = mapClassComponent.get(i);
-						int comp2 = mapClassComponent.get(j);
+						Integer comp1 = mapClassComponent.get(i);
+						Integer comp2 = mapClassComponent.get(j);
 						
 						if(this.initialSolution.mapNewId2OldId != null){
-							int aux = this.initialSolution.mapNewId2OldId.get(comp1);
+							Integer aux = this.initialSolution.mapNewId2OldId.get(comp1);
 							comp1 = aux;
-							int aux2 = this.initialSolution.mapNewId2OldId.get(comp2);
+							Integer aux2 = this.initialSolution.mapNewId2OldId.get(comp2);
 							comp2 = aux2;
 						}
 						
@@ -138,20 +138,20 @@ public class Ant {
 
 		// build matrix of Interfaces (Class x Class)
 		double[] probsClass = new double[this.pheromoneMatrix.classes];
-		HashMap<Integer, int[]> mapVetProbToMatrix = new HashMap<Integer, int[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
-		ArrayList<int[]> interfaces = new ArrayList<int[]>();
+		HashMap<Integer, Integer[]> mapVetProbToMatrix = new HashMap<Integer, Integer[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
+		ArrayList<Integer[]> interfaces = new ArrayList<Integer[]>();
 
 		// build matrix of relations between classes of same component (Class x Class)
 		double probsClassIntR[] = new double[this.pheromoneMatrix.classes];
-		HashMap<Integer, int[]> mapVetProbToMatrixIntR = new HashMap<Integer, int[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
-		ArrayList<int[]> internalRelation = new ArrayList<int[]>();
+		HashMap<Integer, Integer[]> mapVetProbToMatrixIntR = new HashMap<Integer, Integer[]>(); //this HashMap maps an prob of vector 'prob' to an index of matrix
+		ArrayList<Integer[]> internalRelation = new ArrayList<Integer[]>();
 
-		for (int i = 0; i < this.pheromoneMatrix.classes; i++) {
+		for (Integer i = 0; i < this.pheromoneMatrix.classes; i++) {
 			int x = 0; // interfaces
 			int y = 0; // internal relations
 			double sumProbs = 0;
 			double sumProbsIntR = 0;
-			for (int j = 0; j < this.pheromoneMatrix.classClass[0].length; j++) {
+			for (Integer j = 0; j < this.pheromoneMatrix.classClass[0].length; j++) {
 				if(i != j && !twoClassInComponent(i,j,mapComponentClass)){
 					double prob = 0.0;
 					/* based on the list of classBreak and badRealation i calculate how many penalty will be
@@ -162,7 +162,7 @@ public class Ant {
 					
 					probsClass[x] = prob;
 					sumProbs += prob;
-					int[] indices = new int[2];
+					Integer[] indices = new Integer[2];
 					indices[0] = i; indices[1] = j;
 					mapVetProbToMatrix.put(x, indices);
 					x++;
@@ -184,7 +184,7 @@ public class Ant {
 
 					probsClassIntR[y] = probIntR;
 					sumProbsIntR += probIntR;
-					int[] indices = new int[2];
+					Integer[] indices = new Integer[2];
 					indices[0] = i; indices[1] = j;
 					mapVetProbToMatrixIntR.put(y, indices);
 					y++;
@@ -193,7 +193,7 @@ public class Ant {
 
 			if(sumProbs != 0){
 				int solutionSelectedInterfaces = rouletteIn(probsClass,sumProbs);
-				int elements[] = mapVetProbToMatrix.get(solutionSelectedInterfaces);
+				Integer elements[] = mapVetProbToMatrix.get(solutionSelectedInterfaces);
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
 					interfaces.add(mapVetProbToMatrix.get(solutionSelectedInterfaces));
 					
@@ -236,7 +236,7 @@ public class Ant {
 
 			if(sumProbsIntR != 0){
 				int solutionSelectedInternalRelation = rouletteIn(probsClassIntR,sumProbsIntR);
-				int elements[] = mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation);
+				Integer elements[] = mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation);
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
 					internalRelation.add(mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation));
 					
@@ -361,7 +361,7 @@ public class Ant {
 	 * @return true if they are in the same component
 	 * @return false they are not in the same component
 	 */
-	private boolean twoClassInComponent(int i, int x, HashMap<Integer, Set<Integer>> mapComponentClass) {
+	private boolean twoClassInComponent(Integer i, Integer x, HashMap<Integer, Set<Integer>> mapComponentClass) {
 		for (Entry<Integer, Set<Integer>> component : mapComponentClass.entrySet()) {
 			if(component.getValue().contains(i) && component.getValue().contains(x)){
 				return true; // i and x same component

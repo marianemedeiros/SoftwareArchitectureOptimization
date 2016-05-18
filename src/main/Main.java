@@ -36,11 +36,11 @@ public class Main {
 		directory.mkdir();
 		String results = directory.getAbsolutePath();
 		
-		double[] alphas = {0.8, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
-		double[] betas = {0.9, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
+		double[] alphas = {0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
+		double[] betas = {0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
 		double[] evaporationRates = {0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
-		int[] iterations = {10, 20, 40, 80, 160, 320, 400};
-		int[] ants = {5, 10, 20, 40, 80, 160, 320};
+		int[] iterations = {20, 40, 80, 160, 320, 400};
+		int[] ants = {20, 40, 80, 160, 320};
 		int trials = 10;
 
 		for (int ant : ants) {
@@ -51,10 +51,10 @@ public class Main {
 							for (int i = 0; i < trials; i++) {
 								Parametro param = new Parametro(iteration, ant, ro, alpha, beta);
 								Architecture architecture = new Architecture(abspath+apacheAntStyle,ant11Style,param,results);// arquitetura do apache-ant sem estilo
-								architecture.initAntSystem(0);
+								architecture.initAntSystem(i);
 
 								architecture = new Architecture(abspath+apacheAnt,ant11,param,results);//arquitetura do apache-ant sem estilo
-								architecture.initAntSystem(0);
+								architecture.initAntSystem(i);
 							}
 						}
 					}

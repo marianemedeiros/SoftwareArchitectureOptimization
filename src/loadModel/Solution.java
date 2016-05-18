@@ -31,8 +31,8 @@ public class Solution {
 	
 	public HashMap<Integer,Integer> classComponent;
 	public HashMap<Integer, Set<Integer>> componentClasses ; // component - classes in component
-	public ArrayList<int[]> interfaces; // interfaces provided between components
-	public ArrayList<int[]> internalRelations; // internal relations between classes of same component
+	public ArrayList<Integer[]> interfaces; // interfaces provided between components
+	public ArrayList<Integer[]> internalRelations; // internal relations between classes of same component
 	
 	public double coesionMetric;
 	public double acopMetric;
@@ -78,8 +78,8 @@ public class Solution {
 	 *  @param componentLayer map with component and the Layer that this component belongs.
 	 *  @param classComponent map with class and component that this class belongs.
 	 * */
-	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<int[]> interfaces,
-			ArrayList<int[]> internalRelations, HashMap<Integer,Integer> componentLayer, HashMap<Integer,Integer> classComponent) {
+	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<Integer[]> interfaces,
+			ArrayList<Integer[]> internalRelations, HashMap<Integer,Integer> componentLayer, HashMap<Integer,Integer> classComponent) {
 		this.type = LoadModel.LAYER;
 		
 		this.componentClasses = componentClass;
@@ -102,10 +102,10 @@ public class Solution {
 	 *  @param classComponent map with class and component that this class belongs.
 	 *  
 	 * */
-	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<int[]> interfaces,
+	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<Integer[]> interfaces,
 			HashMap<Integer, String> mapClassServer,
 			HashMap<Integer, String> mapClassClient,
-			ArrayList<int[]> internalRelations, HashMap<Integer,Integer> classComponent) {
+			ArrayList<Integer[]> internalRelations, HashMap<Integer,Integer> classComponent) {
 		this.type = LoadModel.CLIENT_SERVER;
 		
 		this.componentClasses = componentClass;
@@ -128,8 +128,8 @@ public class Solution {
 	 *  @param classComponent map with class and component that this class belongs.
 	 *  
 	 * */
-	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<int[]> interfaces,
-			ArrayList<int[]> internalRelations, HashMap<Integer,Integer> classComponent) {
+	public Solution(HashMap<Integer, Set<Integer>> componentClass, ArrayList<Integer[]> interfaces,
+			ArrayList<Integer[]> internalRelations, HashMap<Integer,Integer> classComponent) {
 		this.type = "";
 		
 		this.componentClasses = componentClass;
@@ -147,11 +147,11 @@ public class Solution {
 				}
 		}
 		
-		for (int[] i : interfaces) {
+		for (Integer[] i : interfaces) {
 			System.out.println("Interface between class <" + i[0] + "," + i[1] + ">");
 		}
 		
-		for (int[] i : internalRelations) {
+		for (Integer[] i : internalRelations) {
 			System.out.println("Internal Relation between class <" + i[0] + "," + i[1] + ">");
 		}
 		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");

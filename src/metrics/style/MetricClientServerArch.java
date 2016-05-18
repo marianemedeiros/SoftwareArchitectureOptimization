@@ -26,7 +26,7 @@ public class MetricClientServerArch {
 //			System.out.println("---- " + class1 +":"+ type1 + " ---" +class2 + ":"+ type2);
 //			System.out.println("QUEBROU REGRA: " + class1 + ": " + penalty.classBreak.get(class1));
 
-			int r[] = new int[2];
+			Integer r[] = new Integer[2];
 			r[0] = class1; r[1] = class2;
 			penalty.listBadRel.add(r);
 		}

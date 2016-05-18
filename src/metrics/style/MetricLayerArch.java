@@ -28,7 +28,7 @@ public class MetricLayerArch {
 				}else{
 					penalty.classBreak.put(class1, penalty.classBreak.get(class2)+1);
 				}
-				int[] r = new int[2];
+				Integer[] r = new Integer[2];
 				r[0] = class1; r[1] = class2;
 					penalty.listBadRel.add(r);
 			}
