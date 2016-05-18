@@ -75,12 +75,12 @@ public class AntSystem {
 			relationPenalized[i] = colony.getBestAnt().getSolution().penaltysOfSolution.classBreak.size();
 		}
 
-		//System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
+		System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
 		//System.out.println("Winner ant: " + colony.getBestAnt().getIdentidade());
 
 		this.mediaMq = (sum/parametros.ITERATIONS);
-		//System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
-		//System.out.println("Average of fitness function (MQ): " + this.mediaMq);
+		System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
+		System.out.println("Average of fitness function (MQ): " + this.mediaMq);
 
 		return colony.getBestAnt().getSolution();
 	}
