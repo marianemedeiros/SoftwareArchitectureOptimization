@@ -134,6 +134,8 @@ public class Architecture {
 				bufferedWriter.newLine();
 				bufferedWriter.write("Total of penalties (1 - h): " + s.totalOfPenalties2);
 				bufferedWriter.newLine();
+				bufferedWriter.write("Total of relation penalized: " + s.penaltysOfSolution.classBreak.size());
+				bufferedWriter.newLine();
 				
 				for (int i = 0; i < antSystem.penalties.length; i++) {
 					bufferedWriter.write("-- Iteration " + i + " Total of penalties (h): " + antSystem.penalties[i]);
@@ -142,6 +144,11 @@ public class Architecture {
 				
 				for (int i = 0; i < antSystem.penalties2.length; i++) {
 					bufferedWriter.write("-- Iteration " + i + " Total of penalties (1 - h): " + antSystem.penalties2[i]);
+					bufferedWriter.newLine();
+				}
+				
+				for (int i = 0; i < antSystem.relationPenalized.length; i++) {
+					bufferedWriter.write("-- Iteration " + i + " Total of relation penalized: " + antSystem.relationPenalized[i]);
 					bufferedWriter.newLine();
 				}
 			}

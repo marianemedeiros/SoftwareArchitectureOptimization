@@ -16,6 +16,7 @@ public class AntSystem {
 	
 	public double[] penalties;
 	public double[] penalties2;
+	public int[] relationPenalized;
 	
 	private Parametro parametros;
 	/**
@@ -55,6 +56,7 @@ public class AntSystem {
 		evolutionMq = new double[parametros.ITERATIONS];
 		penalties = new double[parametros.ITERATIONS];
 		penalties2 = new double[parametros.ITERATIONS];
+		relationPenalized = new int[parametros.ITERATIONS];
 		
 		double sum = 0.0;
 
@@ -70,6 +72,7 @@ public class AntSystem {
 			evolutionMq[i] = colony.getValueOfBestValueFound();
 			penalties[i] = colony.getBestAnt().getSolution().totalOfPenalties; 
 			penalties2[i] = colony.getBestAnt().getSolution().totalOfPenalties2; 
+			relationPenalized[i] = colony.getBestAnt().getSolution().penaltysOfSolution.classBreak.size();
 		}
 
 		//System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
