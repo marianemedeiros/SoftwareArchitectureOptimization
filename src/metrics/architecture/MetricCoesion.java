@@ -6,6 +6,8 @@ package metrics.architecture;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.apache.commons.math.util.FastMath;
+
 import loadModel.Solution;
 
 
@@ -33,7 +35,7 @@ public class MetricCoesion {
 					internalRelation++;
 				}				
 			}
-			coesion = coesion + (internalRelation/ (Math.pow(component.getValue().size(), 2)));
+			coesion = coesion + (internalRelation/ (FastMath.pow(component.getValue().size(), 2)));
 		}
 		soluction.coesionMetric = coesion;
 		return soluction;

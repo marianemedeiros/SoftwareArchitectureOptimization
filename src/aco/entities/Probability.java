@@ -78,12 +78,12 @@ public class Probability {
 		float pow = (float) FastMath.pow(h, parametros.BETA);
 		 //(float) Math.pow(h, parametros.BETA);
 		//System.err.println("line " + line + "\ncolumn " + column);
-		numerador = (float) Math.pow(matriz[line][column], parametros.ALPA);
+		numerador = (float) FastMath.pow(matriz[line][column], parametros.ALPA);
 		numerador = numerador * pow;
 
 		float denominador = 0;
 		for (int i = 0; i < matriz[0].length; i++) 
-			denominador = denominador + ((float) ( Math.pow(matriz[line][i], parametros.ALPA) * pow));
+			denominador = denominador + ((float) ( FastMath.pow(matriz[line][i], parametros.ALPA) * pow));
 	
 		return (denominador != 0 ? (numerador / denominador) : 0);
 	}
