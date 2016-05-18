@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.math.util.FastMath;
+
 import loadModel.Solution;
 
 /**
@@ -45,7 +47,7 @@ public class Probability {
 	
 		if(s.interfaces != null){
 			// 2 calcular as probabilidades de relacionar classes de diferentes componentes (interfaces)
-			for (int[] interface_ : s.interfaces) {
+			for (Integer[] interface_ : s.interfaces) {
 				double rt = calculatesProbability(this.matrix.classClass, interface_[0], interface_[1], DEFAULT_VALUE_HEURISTIC);
 //				System.err.println(interface_[0] + ":" + interface_[1] + "=" + rt);
 				this.matrix.classClass[interface_[0]][interface_[1]] = rt;
@@ -54,7 +56,7 @@ public class Probability {
 
 		if(s.internalRelations != null){
 			// 3 calccular as probabilidades de relacionar classes de um mesmo componente (internalRelation)
-			for (int[] interface_ : s.internalRelations) {
+			for (Integer[] interface_ : s.internalRelations) {
 				double rt = calculatesProbability(this.matrix.classClass, interface_[0], interface_[1], DEFAULT_VALUE_HEURISTIC);
 //				System.err.println(interface_[0] + ":" + interface_[1] + "=" + rt);
 				this.matrix.classClass[interface_[0]][interface_[1]] = rt;
@@ -71,16 +73,17 @@ public class Probability {
 	 * @param line - line index.
 	 * @param column - column index.
 	 */
-	public double calculatesProbability(double[][] matriz, int line, int column, Double h) {
-		double numerador = 0;
-		double pow = Math.pow(h, parametros.BETA);
+	public double calculatesProbability(double[][] matriz, int line, int column, double h) {
+		float numerador = 0;
+		float pow = (float) FastMath.pow(h, parametros.BETA);
+		 //(float) Math.pow(h, parametros.BETA);
 		//System.err.println("line " + line + "\ncolumn " + column);
-		numerador = Math.pow(matriz[line][column], parametros.ALPA);
+		numerador = (float) Math.pow(matriz[line][column], parametros.ALPA);
 		numerador = numerador * pow;
 
-		double denominador = 0;
+		float denominador = 0;
 		for (int i = 0; i < matriz[0].length; i++) 
-			denominador = denominador + (( Math.pow(matriz[line][i], parametros.ALPA) * pow));
+			denominador = denominador + ((float) ( Math.pow(matriz[line][i], parametros.ALPA) * pow));
 	
 		return (denominador != 0 ? (numerador / denominador) : 0);
 	}
