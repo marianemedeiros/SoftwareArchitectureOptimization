@@ -29,7 +29,7 @@ public class Matrix {
 		init(0.5);
 	}
 	
-	public Matrix(int comp, int cl, int value) {
+	public Matrix(int comp, int cl, double value) {
 		this.components = comp;
 		this.classes = cl;
 		
