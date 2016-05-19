@@ -32,15 +32,24 @@ public class Main {
 		String[] split = abspath.split("/");
 		
 		String home = "/" + split[1] +"/"+ split[2];
-		File directory = new File(home + "/resultados/");
+		File directory = new File(home + "/resultadosTeste/");
 		directory.mkdir();
 		String results = directory.getAbsolutePath();
 		
+		/*
 		double[] alphas = {0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
-		double[] betas = {0.1, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
+		double[] betas = {0.8, 0.2, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
 		double[] evaporationRates = {0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
 		int[] iterations = {20, 40, 80, 160, 320, 400};
-		int[] ants = {20, 40, 80, 160, 320};
+		int[] ants = {100, 40, 80, 160, 320}; 
+		*/
+		
+		double[] alphas = {0.6};
+		double[] betas = {0.0,0.3};
+		double[] evaporationRates = {0.4};
+		int[] iterations = {100};
+		int[] ants = {15};
+		
 		int trials = 10;
 
 		for (int ant : ants) {
@@ -48,14 +57,15 @@ public class Main {
 				for (double alpha : alphas) {
 					for (double beta : betas) {
 						for (double ro :evaporationRates) {
-							for (int i = 0; i < trials; i++) {
+							//for (int i = 0; i < trials; i++) {
 								Parametro param = new Parametro(iteration, ant, ro, alpha, beta);
-								Architecture architecture = new Architecture(abspath+apacheAntStyle,ant11Style,param,results);// arquitetura do apache-ant sem estilo
-								architecture.initAntSystem(i);
+								System.err.println(iteration + ", " + ant + ", " + ro + ", " + alpha + "," + beta);
+								//Architecture architecture = new Architecture(abspath+apacheAntStyle,ant11Style,param,results);// arquitetura do apache-ant sem estilo
+								//architecture.initAntSystem(0);
 
-								architecture = new Architecture(abspath+apacheAnt,ant11,param,results);//arquitetura do apache-ant sem estilo
-								architecture.initAntSystem(i);
-							}
+								Architecture architecture = new Architecture(abspath+apacheAntStyle,ant11Style,param,results);//arquitetura do apache-ant sem estilo
+								architecture.initAntSystem(0);
+							//}
 						}
 					}
 				}

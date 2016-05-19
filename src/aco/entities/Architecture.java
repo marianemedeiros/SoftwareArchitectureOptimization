@@ -165,18 +165,18 @@ public class Architecture {
 			bufferedWriter.newLine();
 			bufferedWriter.write("Total of penalties (1 - h): " + s.totalOfPenalties2);
 			bufferedWriter.newLine();
-		}
 
-		for (int i = 0; i < antSystem.evolutionMq.length; i++) {
-			bufferedWriter.write("-- Iteration " + i + " MQ value: " + antSystem.evolutionMq[i] + ", Total of penalties (h): "
-					+ antSystem.penalties[i] + " Total of penalties (1 - h): " + antSystem.penalties2[i] +
-					" Total of relation penalized: " + antSystem.relationPenalized[i]);
+			for (int i = 0; i < antSystem.evolutionMq.length; i++) {
+				bufferedWriter.write("-- Iteration " + i + " MQ value: " + antSystem.evolutionMq[i] + ", Total of penalties (h): "
+						+ antSystem.penalties[i] + " Total of penalties (1 - h): " + antSystem.penalties2[i] +
+						" Total of relation penalized: " + antSystem.relationPenalized[i]);
+				bufferedWriter.newLine();
+			}
+
+			bufferedWriter.write("Time Execution: " + formatter.format(d));
 			bufferedWriter.newLine();
-		}
-
-		bufferedWriter.write("Time Execution: " + formatter.format(d));
-		bufferedWriter.newLine();
-		bufferedWriter.newLine();
-		bufferedWriter.close();
-	}	
+			bufferedWriter.newLine();
+			bufferedWriter.close();
+		}	
+	}
 }
