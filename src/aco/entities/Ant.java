@@ -46,12 +46,15 @@ public class Ant {
 
 	private SplittableRandom random;
 	
+	private Parametro parametros;
+	
 	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
 		idDaFormiga = idDaFormiga + 1;
 		this.identidade = idDaFormiga;
 		probability = new Probability(p);
 		random = new SplittableRandom();
+		this.parametros = p;
 	}
 
 	public Ant(Matrix pheromone, Solution s, Parametro p) {
@@ -325,6 +328,36 @@ public class Ant {
 	 */
 	private double verifyStylerArchAndCalcHeuristic(int i, int j) {
 		double probIntR = 0.0;
+		if(possiblePenaltiesOfSolution.classBreak.size() == 0 && possiblePenaltiesOfSolution.listBadRel.size() == 0){
+			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
+			if(Main.SHOW_LOGS)
+				System.out.println("NÃ£o combinar classe " + i + " com ninguÃ©m. Ou, a arquitetura nÃ£o quebra nenhuma regra do estilo.");
+			
+		}else{
+			if(Main.SHOW_LOGS)
+				System.out.println("Quantas vezes a classe <<" + i + ">> quebrou a regra: <<" + possiblePenaltiesOfSolution.classBreak.get(i) +
+					">> \nQuantas vezes a classe<<" + j + ">> quebrou a regra: <<" + possiblePenaltiesOfSolution.classBreak.get(j) + ">>");
+			double h = 0.0;
+			if(possiblePenaltiesOfSolution.classBreak.get(i) == null &&  possiblePenaltiesOfSolution.classBreak.get(j) == null)
+				h = Probability.DEFAULT_VALUE_HEURISTIC;
+			else if (possiblePenaltiesOfSolution.classBreak.get(i) == null){
+				h =  ((double)possiblePenaltiesOfSolution.classBreak.get(j)) / possiblePenaltiesOfSolution.listBadRel.size();
+			}
+			else if (possiblePenaltiesOfSolution.classBreak.get(j) == null){
+				h =  ((double)possiblePenaltiesOfSolution.classBreak.get(i)) / (possiblePenaltiesOfSolution.listBadRel.size());
+			}else {
+				h =  ((double)(possiblePenaltiesOfSolution.classBreak.get(i) + possiblePenaltiesOfSolution.classBreak.get(j))) / (possiblePenaltiesOfSolution.listBadRel.size());
+			}
+			
+			if(Main.SHOW_LOGS)
+				System.out.println("Valor da penalidade para combinaÃ§Ã£o " + i +"-"+ j  +" = "+ h + "(1-h=" + (1-h) + ")");
+			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, (1 - h));
+		}
+		return probIntR;
+	}
+	
+	private double verifyStylerArchAndCalcHeuristic2(int i, int j) {
+		double probIntR = 0.0;
 		if(j == (this.pheromoneMatrix.classClass[0].length - 1) || (possiblePenaltiesOfSolution.classBreak.size() == 0 && possiblePenaltiesOfSolution.listBadRel.size() == 0)){
 			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
 			if(Main.SHOW_LOGS)
@@ -338,12 +371,12 @@ public class Ant {
 			if(possiblePenaltiesOfSolution.classBreak.get(i) == null &&  possiblePenaltiesOfSolution.classBreak.get(j) == null)
 				h = Probability.DEFAULT_VALUE_HEURISTIC;
 			else if (possiblePenaltiesOfSolution.classBreak.get(i) == null){
-				h =  possiblePenaltiesOfSolution.classBreak.get(j) / possiblePenaltiesOfSolution.listBadRel.size();
+				h =  ((double)possiblePenaltiesOfSolution.classBreak.get(j)) / possiblePenaltiesOfSolution.listBadRel.size();
 			}
 			else if (possiblePenaltiesOfSolution.classBreak.get(j) == null){
-				h =  (possiblePenaltiesOfSolution.classBreak.get(i)) / (possiblePenaltiesOfSolution.listBadRel.size());
+				h =  ((double)possiblePenaltiesOfSolution.classBreak.get(i)) / (possiblePenaltiesOfSolution.listBadRel.size());
 			}else {
-				h =  ((possiblePenaltiesOfSolution.classBreak.get(i) + possiblePenaltiesOfSolution.classBreak.get(j))) / (possiblePenaltiesOfSolution.listBadRel.size());
+				h =  ((double)(possiblePenaltiesOfSolution.classBreak.get(i) + possiblePenaltiesOfSolution.classBreak.get(j))) / (possiblePenaltiesOfSolution.listBadRel.size());
 			}
 			
 			if(Main.SHOW_LOGS)
