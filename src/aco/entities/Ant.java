@@ -46,15 +46,12 @@ public class Ant {
 
 	private SplittableRandom random;
 	
-	private Parametro parametros;
-	
 	public Ant(Matrix pheromone, Parametro p) {
 		this.pheromoneMatrix = pheromone;
 		idDaFormiga = idDaFormiga + 1;
 		this.identidade = idDaFormiga;
 		probability = new Probability(p);
 		random = new SplittableRandom();
-		this.parametros = p;
 	}
 
 	public Ant(Matrix pheromone, Solution s, Parametro p) {
@@ -71,6 +68,9 @@ public class Ant {
 	 * @return solution built by ant.
 	 * */
 	public synchronized Solution buildSolution() {
+		HashMap<Integer,Integer> classQtdRelationE = new HashMap<Integer, Integer>();
+		HashMap<Integer,Integer> classQtdRelationI = new HashMap<Integer, Integer>();
+		
 		sumPenalties = 0.0; sumPenalties2 = 0.0;
 		double[] probs = new double[this.pheromoneMatrix.components];
 		HashMap<Integer, Set<Integer>> mapComponentClass = new HashMap<Integer, Set<Integer>>();
@@ -197,7 +197,11 @@ public class Ant {
 			if(sumProbs != 0){
 				int solutionSelectedInterfaces = rouletteIn(probsClass,sumProbs);
 				Integer elements[] = mapVetProbToMatrix.get(solutionSelectedInterfaces);
+				
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
+					classQtdRelationE = incRelation(elements[0], classQtdRelationE);
+					classQtdRelationE = incRelation(elements[1], classQtdRelationE);
+
 					interfaces.add(mapVetProbToMatrix.get(solutionSelectedInterfaces));
 					
 					if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) == null
@@ -233,14 +237,18 @@ public class Ant {
 						System.out.println("---Interface " + mapVetProbToMatrix.get(solutionSelectedInterfaces)[0]
 							+ "-" + mapVetProbToMatrix.get(solutionSelectedInterfaces)[1]);
 				}else if(Main.SHOW_LOGS){
-					System.out.println("---Classe " + elements[0] + " nÃ£o vai ser combinada com ninguÃ©m.");
+					System.out.println("---Classe " + elements[0] + " não vai ser combinada com ninguém.");
 				}
 			}
 
 			if(sumProbsIntR != 0){
 				int solutionSelectedInternalRelation = rouletteIn(probsClassIntR,sumProbsIntR);
 				Integer elements[] = mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation);
+				
 				if(elements[1] != (this.pheromoneMatrix.classClass[0].length - 1)){
+					classQtdRelationI = incRelation(elements[0], classQtdRelationI);
+					classQtdRelationI = incRelation(elements[1], classQtdRelationI);
+
 					internalRelation.add(mapVetProbToMatrixIntR.get(solutionSelectedInternalRelation));
 					
 					if (this.initialSolution.type.equals(LoadModel.CLIENT_SERVER)){
@@ -252,7 +260,6 @@ public class Ant {
 									 ((double) possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 = sumPenalties2 + 
 									 (1 - ((double) possiblePenaltiesOfSolution.classBreak.get(elements[1])) / (possiblePenaltiesOfSolution.listBadRel.size()));
-							System.err.println("sumP: " + sumPenalties);
 						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) == null){//doesn't have j, but has i
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
@@ -261,7 +268,6 @@ public class Ant {
 									 ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size());
 							sumPenalties2 = sumPenalties2 + 
 									 (1 - ((double) possiblePenaltiesOfSolution.classBreak.get(elements[0])) / (possiblePenaltiesOfSolution.listBadRel.size()));
-							System.err.println("sumP: " + sumPenalties);
 						}else if (this.initialSolution != null && possiblePenaltiesOfSolution.classBreak.get(elements[0]) != null
 								&& possiblePenaltiesOfSolution.classBreak.get(elements[1]) != null){//has i and j
 							penaltiesOfCurrentSolution.addToClassBreak(elements[0]);
@@ -294,6 +300,7 @@ public class Ant {
 					this.initialSolution.mapClassClient, 
 					internalRelation, mapClassComponent);
 			this.solution.penaltysOfSolution = penaltiesOfCurrentSolution;
+			
 		}else{
 			this.solution = new Solution(mapComponentClass,interfaces, internalRelation,null,mapClassComponent); 
 		}
@@ -309,11 +316,21 @@ public class Ant {
 		this.solution = modulatizationQuality.calculate(solution);
 		this.solution.totalOfPenalties = sumPenalties;
 		this.solution.totalOfPenalties2 =  sumPenalties2;
+		this.solution.classQtdRelationE = classQtdRelationE;
+		this.solution.classQtdRelationI = classQtdRelationI;
+
 		return  solution;
-		
 	}
 
 
+	private HashMap<Integer, Integer> incRelation(Integer class_, HashMap<Integer, Integer> mapOfclassRelation){
+		if( mapOfclassRelation.containsKey(class_)){
+			mapOfclassRelation.put(class_, mapOfclassRelation.get(class_)+1);
+		}else{
+			mapOfclassRelation.put(class_, 1);
+		}
+		return mapOfclassRelation;
+	}
 	/**
 	 * Consider penalty calculation to classes in the same component, because in CLIENT/SERVER style one component may have
 	 * server and clients classes.
@@ -326,7 +343,7 @@ public class Ant {
 	 * @param j
 	 * @return
 	 */
-	private double verifyStylerArchAndCalcHeuristic(int i, int j) {
+	private double verifyStylerArchAndCalcHeuristic2(int i, int j) {
 		double probIntR = 0.0;
 		if(possiblePenaltiesOfSolution.classBreak.size() == 0 && possiblePenaltiesOfSolution.listBadRel.size() == 0){
 			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
@@ -356,7 +373,7 @@ public class Ant {
 		return probIntR;
 	}
 	
-	private double verifyStylerArchAndCalcHeuristic2(int i, int j) {
+	private double verifyStylerArchAndCalcHeuristic(int i, int j) {
 		double probIntR = 0.0;
 		if(j == (this.pheromoneMatrix.classClass[0].length - 1) || (possiblePenaltiesOfSolution.classBreak.size() == 0 && possiblePenaltiesOfSolution.listBadRel.size() == 0)){
 			probIntR = this.probability.calculatesProbability(this.pheromoneMatrix.classClass, i, j, Probability.DEFAULT_VALUE_HEURISTIC);
