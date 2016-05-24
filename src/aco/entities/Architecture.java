@@ -9,6 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import loadModel.LoadModel;
 import loadModel.Solution;
@@ -33,6 +35,11 @@ public class Architecture {
 	private Parametro parametros;
 
 	private String diretorioResults;
+	private BufferedWriter bufferedWriter;
+
+	public int []evolutionClassRelationE;
+	public int []evolutionClassRelationI;
+	public int []evolutionComponentClass;
 
 	public Architecture(String pathUmlFile, String nameFile, Parametro p, String s) throws Exception {
 		this.nameFile = nameFile;
@@ -46,10 +53,12 @@ public class Architecture {
 			System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to extract architecture");
 		this.parametros = p;
 		saveExtractArch(initialSolution,nameFile + "_"+"modeloExtraido");
-
+		evolutionClassRelationE = new int[initialSolution.classComponent.size()];
+		evolutionClassRelationI = new int[initialSolution.classComponent.size()];
+		evolutionComponentClass = new int[initialSolution.componentClasses.size()];
 	}
 
-	public void initAntSystem(int trial) throws Exception{
+	public Solution initAntSystem(int trial) throws Exception{
 		if(this.initialSolution.interfaces != null && this.initialSolution.internalRelations != null){// arquitetura ja estruturada
 			MetricCoupling coupling = new MetricCoupling();
 			this.initialSolution = coupling.calculate(initialSolution);
@@ -71,7 +80,7 @@ public class Architecture {
 				System.out.println(" Number of components: " + initialSolution.componentClasses.size() + "\n Number of classes: " + initialSolution.classComponent.size());
 			}
 
-			Matrix m = new Matrix(initialSolution.componentClasses.size(), initialSolution.classComponent.size(),0.5);
+			Matrix m = new Matrix(initialSolution.componentClasses.size(), initialSolution.classComponent.size());
 			antSystem = new AntSystem(m,initialSolution,parametros);
 		}else{// to architectures with loose components and classes.
 			//System.out.println("\n No established architecture!!!");
@@ -87,14 +96,60 @@ public class Architecture {
 		saveExtractArch(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"
 				+parametros.BETA + "_" + trial);
 		saveValues(generatedSolution,((stopTime - startTime) / 1000d),nameFile + "_dados", trial);
-		//savePheromoneMatrix("pheromone_matrix_"  + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"
-		//		+parametros.BETA + "_" + trial);
+		saveExtracInfosClass(generatedSolution, nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"
+				+parametros.BETA+ "_infos_relationXclasses" + ".csv", trial);
+		saveExtracInfosComponents(generatedSolution,  nameFile + "_" + "modeloOtimizado" + "_"+parametros.ITERATIONS +"_" +parametros.ANTS+"_"+parametros.RO+"_"+parametros.ALPA+"_"
+				+parametros.BETA + "_infos_componentXclasses"+".csv", trial);
+
+		return generatedSolution;
+	}
+
+	public void saveExtracInfosComponents(Solution s, String nameFile, int trial) throws IOException{
+		File file = new File(this.diretorioResults,nameFile);
+		FileWriter fileWriter = new FileWriter(file,true);
+		bufferedWriter = new BufferedWriter(fileWriter);
+
+		bufferedWriter.write("Component,Class,Trial");
+		bufferedWriter.newLine();
+
+
+		for (Entry<Integer, Set<Integer>> comp : s.componentClasses.entrySet()) {
+			bufferedWriter.write(comp.getKey()+ "," + comp.getValue().size() + "," +trial);
+			bufferedWriter.newLine();
+			if(s.classQtdRelationI.get(comp.getKey()) != null && comp.getValue().size() != 0){
+				this.evolutionComponentClass[comp.getKey()] = this.evolutionComponentClass[comp.getKey()] + comp.getValue().size();
+			}
+		}
+		bufferedWriter.close();
+	}
+
+
+	public void saveExtracInfosClass(Solution s, String nameFile, int trial) throws IOException{
+		File file = new File(this.diretorioResults,nameFile);
+		FileWriter fileWriter = new FileWriter(file,true);
+		bufferedWriter = new BufferedWriter(fileWriter);
+
+		bufferedWriter.write("Class,Internal,External,Trial");
+		bufferedWriter.newLine();
+
+		for (Entry<Integer, Integer> class_ : s.classComponent.entrySet()) {
+			bufferedWriter.write(class_.getKey()+ "," + s.classQtdRelationI.get(class_.getKey()) + ","+ s.classQtdRelationE.get(class_.getKey()) +"," +trial);
+			bufferedWriter.newLine();
+
+			if(s.classQtdRelationE.get(class_.getKey()) != null){
+				this.evolutionClassRelationE[class_.getKey()] = this.evolutionClassRelationE[class_.getKey()] +  s.classQtdRelationE.get(class_.getKey());
+			}
+			if(s.classQtdRelationI.get(class_.getKey()) != null){
+				this.evolutionClassRelationI[class_.getKey()] = this.evolutionClassRelationI[class_.getKey()] +  s.classQtdRelationI.get(class_.getKey());
+			}
+		}
+		bufferedWriter.close();
 	}
 
 	private void savePheromoneMatrix(String nameFile) throws IOException{
 		File file = new File(this.diretorioResults,nameFile);
 		FileWriter fileWriter = new FileWriter(file);
-		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter = new BufferedWriter(fileWriter);
 
 		bufferedWriter.write("Class x Component \n");
 		bufferedWriter.newLine();
@@ -107,7 +162,7 @@ public class Architecture {
 			bufferedWriter.newLine();
 		}
 
-		System.out.println("\n Class x Class \n");
+		bufferedWriter.write("\n Class x Class \n");
 		for (int i = 0; i < antSystem.colony.getPheromoneMatrix().classes; i++) {
 			bufferedWriter.write("[");
 			for (int j = 0; j < antSystem.colony.getPheromoneMatrix().classClass[0].length ; j++) {
@@ -124,7 +179,7 @@ public class Architecture {
 	private void saveExtractArch(Solution s, String nameFile) throws IOException {
 		File file = new File(this.diretorioResults,nameFile);
 		FileWriter fileWriter = new FileWriter(file);
-		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter = new BufferedWriter(fileWriter);
 		loadModel.showSolution(s,bufferedWriter, this.initialSolution.mapNewId2OldId, this.initialSolution.mapOldId2NewId);
 		bufferedWriter.close();
 	}
@@ -132,7 +187,7 @@ public class Architecture {
 	private void saveValues(Solution s, double d, String nameFile, int trial) throws IOException {
 		File file = new File(this.diretorioResults,nameFile);
 		FileWriter fileWriter = new FileWriter(file,true);
-		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter = new BufferedWriter(fileWriter);
 
 		bufferedWriter.write("Trial: " + trial);
 		bufferedWriter.newLine();
