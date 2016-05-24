@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import loadModel.Solution;
+import main.Main;
 
 
 public class AntSystem {
@@ -60,12 +61,12 @@ public class AntSystem {
 		double sum = 0.0;
 
 		for (int i = 0; i < parametros.ITERATIONS; i++) {
-			System.out.println("\n---------------    Iteration number " + i + " -----------------");
+			//System.out.println("\n---------------    Iteration number " + i + " -----------------");
 
 			long startTime = System.currentTimeMillis();
 			colony.putAntsToWork();
 			long stopTime = System.currentTimeMillis();
-			//if(Main.SHOW_LOGS)
+			if(Main.SHOW_LOGS)
 				System.out.println("Execution time is " + formatter.format((stopTime - startTime) / 1000d) + " seconds to one iteration.");
 			sum = sum + colony.getBestAnt().getSolution().mMetric;
 			evolutionMq[i] = colony.getValueOfBestValueFound();
@@ -74,13 +75,12 @@ public class AntSystem {
 			relationPenalized[i] = colony.getBestAnt().getSolution().penaltysOfSolution.listBadRel.size();
 		}
 
-		System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
+		//System.out.println("\n!!!!!!!!!!   Best Soluction Found    !!!!!!!!!!");
 		//System.out.println("Winner ant: " + colony.getBestAnt().getIdentidade());
 
 		this.mediaMq = (sum/parametros.ITERATIONS);
-		System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
-		System.out.println("Average of fitness function (MQ): " + this.mediaMq);
-
+		//System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
+		//System.out.println("Average of fitness function (MQ): " + this.mediaMq);
 		return colony.getBestAnt().getSolution();
 	}
 }
