@@ -20,6 +20,8 @@ import aco.entities.Penalty;
  */
 public class Solution {
 	public String type =  null;
+	public HashMap<Integer,Integer> classQtdRelationE = null;
+	public HashMap<Integer,Integer> classQtdRelationI = null;
 	
 	public HashMap<Integer,Integer> mapNewId2OldId = null;
 	public HashMap<Integer,Integer> mapOldId2NewId = null;
