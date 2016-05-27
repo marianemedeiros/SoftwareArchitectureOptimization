@@ -104,6 +104,10 @@ public class LoadModel {
 	public ArrayList<Integer[]> internalRelations;
 
 	public String base = "";
+	
+	public HashMap<Integer,Integer> classQtdRelationE;
+	public HashMap<Integer,Integer> classQtdRelationI;
+	
 	public LoadModel(URI uri) {
 		// Create a resource-set to contain the resource(s) that we load and
 		// save
@@ -242,6 +246,10 @@ public class LoadModel {
 	public Solution buildSoluction(){
 		Solution solution = null;
 		collectComponentsClassesInterfacesAndLayers();
+
+		classQtdRelationE = new HashMap<Integer, Integer>();
+		classQtdRelationI = new HashMap<Integer, Integer>();
+
 		for (TreeIterator<EObject> i = resource.getAllContents(); i .hasNext();) {
 			EObject current = i.next();
 
@@ -302,7 +310,9 @@ public class LoadModel {
 			solution.mapNewId2OldId = mapNewId2OldId;
 			solution.mapOldId2NewId = mapOldId2NewId;
 		}
-
+		
+		solution.classQtdRelationE = classQtdRelationE;
+		solution.classQtdRelationI = classQtdRelationI;
 		return solution;		
 	}
 	
@@ -339,6 +349,8 @@ public class LoadModel {
 			Integer[] aux = new Integer[2];
 			aux[0] = cl1[1]; aux[1] = cl1[0];
 			internalRelations.add(aux);
+			classQtdRelationI = incRelation(aux[0], classQtdRelationI);
+			classQtdRelationI = incRelation(aux[1], classQtdRelationI);
 		}else if(inter[0] != null && inter[1] != null){
 			int class0 = getWhoRealizeInterface(inter[0]); // class that realize inter[0]
 			int class1 = getWhoRealizeInterface(inter[1]); // class that realize inter[1]
@@ -347,11 +359,17 @@ public class LoadModel {
 				Integer[] rl1 = new Integer[2];
 				rl1[0] = class1; rl1[1] = class0;
 				interfaces_.add(rl1); 
+				classQtdRelationE = incRelation(rl1[0], classQtdRelationE);
+				classQtdRelationE = incRelation(rl1[1], classQtdRelationE);
+
 			}
 		}else if((classComponent.get(cl1[0]) != classComponent.get(cl1[1])) && cl1[0] != null && cl1[1] != null){
 			Integer[] aux = new Integer[2];
 			aux[0] = cl1[1]; aux[1] = cl1[0];
 			interfaces_.add(aux);
+			classQtdRelationE = incRelation(aux[0], classQtdRelationE);
+			classQtdRelationE = incRelation(aux[1], classQtdRelationE);
+
 		}
 	}
 
@@ -388,6 +406,8 @@ public class LoadModel {
 						Integer[] r = new Integer[2];
 						r[0] = client; r[1] = idS;
 						internalRelations.add(r);
+						classQtdRelationI = incRelation(r[0], classQtdRelationI);
+						classQtdRelationI = incRelation(r[1], classQtdRelationI);
 					}
 				}
 			}
@@ -398,6 +418,10 @@ public class LoadModel {
 					Integer[] r = new Integer[2];
 					r[0] = client; r[1] = relation;
 					interfaces_.add(r);
+
+					classQtdRelationE = incRelation(r[0], classQtdRelationE);
+					classQtdRelationE = incRelation(r[1], classQtdRelationE);
+
 					//System.out.println("Class <<" + getMapId2ClassName().get(client) + ">> and <<" + getMapId2ClassName().get(relation) + ">> have a relationship.");
 				}
 			}			
@@ -555,6 +579,14 @@ public class LoadModel {
 		}
 	}
 
+	private HashMap<Integer, Integer> incRelation(Integer class_, HashMap<Integer, Integer> mapOfclassRelation){
+		if( mapOfclassRelation.containsKey(class_)){
+			mapOfclassRelation.put(class_, mapOfclassRelation.get(class_)+1);
+		}else{
+			mapOfclassRelation.put(class_, 1);
+		}
+		return mapOfclassRelation;
+	}
 	public void showSizeOfMaps(){
 		System.out.println("Classes: " + mapClassName2Id.size());
 		System.out.println("Component: " + mapComponentName2Id.size());
