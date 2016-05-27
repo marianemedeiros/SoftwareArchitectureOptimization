@@ -1,8 +1,9 @@
-abspath=/home/mariane/workspace/aco2architectureoptimization/modelos_UML/ApacheAnt11Style
-name=apache-ant11Style
+abspath=/home/mariane/workspace/aco2architectureoptimization/modelos_UML
+name=apache-ant11
 
-alphas = 0.1,0.4,0.6,0.9
-betas = 0.0,0.6,0.9
-evaporationRates = 0,4,0.7
-iterations = 30,50,100
-ants = 20,50,100
+alphas = 0.4
+betas = 0.0
+evaporationRates = 0.7
+iterations = 2
+ants = 1
+results = /home/mariane/workspace/aco2architectureoptimization/resultados
