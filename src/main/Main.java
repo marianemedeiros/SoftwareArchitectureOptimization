@@ -44,19 +44,14 @@ public class Main {
 	public static int[] iterations;
 	public static int[] ants;
 	
+	
 	public static String nameFile;
 	public static String pathFile;
+	private static String results;
 	
 	public static void main(String[] args) throws Exception {
 		File file = new java.io.File("");   //Dummy file
 		String  abspath = file.getAbsolutePath();
-		String[] split = abspath.split("/");
-
-		String home = "/" + split[1] +"/"+ split[2];
-		File directory = new File(home + "/resultados/");
-		directory.mkdir();
-		String results = directory.getAbsolutePath();
-
 		extractDatas(abspath);
 		/*
 		double[] alphas = {0.4, 0.5, 0.6, 0.7, 0.8, 1.0};
@@ -81,10 +76,10 @@ public class Main {
 							saveMediaInfoRelationClasses(s, results, Main.nameFile + "_" + "modeloOtimizado" + "_" +
 									iteration + "_" + ant + "_" + ro + "_" + 
 									alpha + "_" + beta + "_infos_relationXclasses_medias"+".csv", architecture.evolutionClassRelationI,
-									architecture.evolutionClassRelationE);
+									architecture.evolutionClassRelationE,1);
 							saveMediaInfoComponentsClasses(s, results, Main.nameFile + "_" + "modeloOtimizado" + "_" +
 									iteration + "_" + ant + "_" + ro + "_" + 
-									alpha + "_" + beta + "_infos_componentXclasses_medias"+".csv", architecture.evolutionComponentClass);
+									alpha + "_" + beta + "_infos_componentXclasses_medias"+".csv", architecture.evolutionComponentClass,1);
 						}
 					}
 				}
@@ -92,7 +87,7 @@ public class Main {
 		}
 	}
 
-	private static void saveMediaInfoRelationClasses(Solution s, String dir, String nameFile, int[] v1, int[] v2) throws IOException{
+	public static void saveMediaInfoRelationClasses(Solution s, String dir, String nameFile, int[] v1, int[] v2, int a) throws IOException{
 		File file = new File(dir,nameFile);
 		FileWriter fileWriter = new FileWriter(file,true);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -101,13 +96,16 @@ public class Main {
 		bufferedWriter.newLine();
 
 		for (Entry<Integer, Integer> class_ : s.classComponent.entrySet()) {
-			bufferedWriter.write(class_.getKey() + "," + (v1[class_.getKey()]/(double)Main.trials) + "," + (v2[class_.getKey()]/(double)Main.trials));
+			if(a == 1)
+				bufferedWriter.write(class_.getKey() + "," + (v1[class_.getKey()]/(double)Main.trials) + "," + (v2[class_.getKey()]/(double)Main.trials));
+			else
+				bufferedWriter.write(class_.getKey() + "," + (v1[class_.getKey()]) + "," + (v2[class_.getKey()]));
 			bufferedWriter.newLine();
 		}
 		bufferedWriter.close();
 	}
 
-	private static void saveMediaInfoComponentsClasses(Solution s, String dir, String nameFile, int[] v1) throws IOException{
+	public static void saveMediaInfoComponentsClasses(Solution s, String dir, String nameFile, int[] v1, int aux) throws IOException{
 		File file = new File(dir,nameFile);
 		FileWriter fileWriter = new FileWriter(file,true);
 		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
@@ -116,7 +114,10 @@ public class Main {
 		bufferedWriter.newLine();
 
 		for (Entry<Integer, Set<Integer>> comp_ : s.componentClasses.entrySet()) {
-			bufferedWriter.write(comp_.getKey() + "," + (v1[comp_.getKey()]/(double)Main.trials));
+			if(aux == 1)
+				bufferedWriter.write(comp_.getKey() + "," + (v1[comp_.getKey()]/(double)Main.trials));
+			else
+				bufferedWriter.write(comp_.getKey() + "," + (v1[comp_.getKey()]));
 			bufferedWriter.newLine();
 		}
 		bufferedWriter.close();
@@ -164,6 +165,8 @@ public class Main {
 				for (int i = 0; i < v.length; i++) {
 					Main.ants[i] = Integer.valueOf(v[i]);
 				}
+			}else if(line.contains("results")){
+				Main.results = line.replace(" ", "").split("=")[1];
 			}
 			line = bufferedReader.readLine();
 		}
