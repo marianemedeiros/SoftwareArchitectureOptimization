@@ -57,23 +57,28 @@ public class Architecture {
 		evolutionClassRelationI = new int[initialSolution.classComponent.size()];
 		evolutionComponentClass = new int[initialSolution.componentClasses.size()];
 
-		int[] componentClasses_ = new int[initialSolution.componentClasses.size()];
+/*		int[] componentClasses_ = new int[initialSolution.componentClasses.size()];
 		for (Entry<Integer, Set<Integer>> element : initialSolution.componentClasses.entrySet()) {
 			componentClasses_[element.getKey()] = element.getValue().size();
 		}
-		//Main.saveMediaInfoComponentsClasses(initialSolution, s, "info_initial_solution.csv", componentClasses_,0);
-		
-		/*for (Entry<Integer, Integer> class_ : initialSolution.classComponent.entrySet()) {
-			if(initialSolution.classQtdRelationE.get(class_.getKey()) != null){
-				this.evolutionClassRelationE[class_.getKey()] = this.evolutionClassRelationE[class_.getKey()] +  initialSolution.classQtdRelationE.get(class_.getKey());
-			}
-			if(initialSolution.classQtdRelationI.get(class_.getKey()) != null){
-				this.evolutionClassRelationI[class_.getKey()] = this.evolutionClassRelationI[class_.getKey()] +  initialSolution.classQtdRelationI.get(class_.getKey());
-			}
+		Main.saveMediaInfoComponentsClasses(initialSolution, s, "info_initial_solution.csv", componentClasses_,0);
+
+		System.err.println(initialSolution.classQtdRelationI + "\n" + initialSolution.classQtdRelationE);
+		File file = new File(Main.results,"teste");
+		FileWriter fileWriter = new FileWriter(file,true);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+		bufferedWriter.write("Class,Internal,External");
+		bufferedWriter.newLine();
+
+		for (Entry<Integer, Integer> class_ : initialSolution.classComponent.entrySet()) {
+
+			bufferedWriter.write(class_.getKey() + "," + initialSolution.classQtdRelationI.get(class_.getKey()) + "," + initialSolution.classQtdRelationE.get(class_.getKey()));
+			bufferedWriter.newLine();
+			
 		}
-		*/
-		//Main.saveMediaInfoRelationClasses(initialSolution, s, "relations_info_initial_solution.csv", evolutionClassRelationI, 
-		//		evolutionClassRelationE,0);
+		bufferedWriter.close();
+*/
 	}
 
 	public Solution initAntSystem(int trial) throws Exception{
