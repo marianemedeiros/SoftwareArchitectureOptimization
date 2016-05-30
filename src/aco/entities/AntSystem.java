@@ -79,7 +79,9 @@ public class AntSystem {
 		//System.out.println("Winner ant: " + colony.getBestAnt().getIdentidade());
 
 		this.mediaMq = (sum/parametros.ITERATIONS);
-		//System.out.println("MQ: " + colony.getBestAnt().getSolution().mMetric);
+		//System.out.println("class break rule: " + colony.getBestAnt().getSolution().penaltysOfSolution.listBadRel.size());
+		//System.out.println("rel. externos: " + colony.getBestAnt().getSolution().interfaces.size());
+		//System.out.println("rel. internos: " + colony.getBestAnt().getSolution().internalRelations.size());
 		//System.out.println("Average of fitness function (MQ): " + this.mediaMq);
 		return colony.getBestAnt().getSolution();
 	}
