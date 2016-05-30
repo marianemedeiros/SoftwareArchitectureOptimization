@@ -47,7 +47,7 @@ public class Main {
 	
 	public static String nameFile;
 	public static String pathFile;
-	private static String results;
+	public static String results;
 	
 	public static void main(String[] args) throws Exception {
 		File file = new java.io.File("");   //Dummy file
